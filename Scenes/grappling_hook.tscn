@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://cg01335krfrqj"]
+
+[ext_resource type="Script" uid="uid://dvyryn2e8p4ry" path="res://Scripts/grappling_hook.gd" id="1_pmbmu"]
+[ext_resource type="Texture2D" uid="uid://bupe6gpi3wj61" path="res://assets/icon.svg" id="2_hfu38"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xv4oh"]
+radius = 2.0
+
+[node name="GrapplingHook" type="CharacterBody2D"]
+script = ExtResource("1_pmbmu")
+metadata/_edit_group_ = true
+
+[node name="GrappleArea" type="Area2D" parent="."]
+
+[node name="GrappleCollisionShape" type="CollisionShape2D" parent="GrappleArea"]
+shape = SubResource("CircleShape2D_xv4oh")
+
+[node name="Sprite2D" type="Sprite2D" parent="GrappleArea"]
+scale = Vector2(0.0351563, 0.03125)
+texture = ExtResource("2_hfu38")
+
+[node name="GrappleBody" type="CollisionShape2D" parent="."]
+scale = Vector2(0.75, 0.75)
+shape = SubResource("CircleShape2D_xv4oh")
