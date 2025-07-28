@@ -1,0 +1,97 @@
+[gd_scene load_steps=15 format=3 uid="uid://r8edqtgxm5oh"]
+
+[ext_resource type="Script" uid="uid://dcv5cgfjx588v" path="res://Scripts/projectile.gd" id="1_f8cdk"]
+[ext_resource type="Texture2D" uid="uid://ctua4jhjuuyrv" path="res://assets/fireball/orb_dissipate___0001.png" id="2_rsyq6"]
+[ext_resource type="Texture2D" uid="uid://bt0yqmpgaubbe" path="res://assets/fireball/orb_dissipate___0002.png" id="3_augfd"]
+[ext_resource type="Texture2D" uid="uid://c08hvtnjvbgtc" path="res://assets/fireball/orb_dissipate___0003.png" id="4_0iiay"]
+[ext_resource type="Texture2D" uid="uid://swnurf22lkgi" path="res://assets/fireball/orb_dissipate___0004.png" id="5_d6p7i"]
+[ext_resource type="Texture2D" uid="uid://bo2mdjwq62eet" path="res://assets/fireball/orb_dissipate___0005.png" id="6_ovs0d"]
+[ext_resource type="Texture2D" uid="uid://du8qmgmxb3idp" path="res://assets/fireball/orb_dissipate___0006.png" id="7_ay8ps"]
+[ext_resource type="Texture2D" uid="uid://o3fp2bil2ogt" path="res://assets/fireball/orb_dissipate___0007.png" id="8_akv1x"]
+[ext_resource type="Texture2D" uid="uid://dgcitutst674n" path="res://assets/particles/fire particles (1).png" id="9_augfd"]
+[ext_resource type="Script" uid="uid://lwaelgplpyyg" path="res://Scenes/gpu_particles_2d.gd" id="10_0iiay"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yr2qt"]
+size = Vector2(14, 12.5)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_h15bx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_rsyq6")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_rsyq6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_augfd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_0iiay")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_d6p7i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_ovs0d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_ay8ps")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_akv1x")
+}],
+"loop": false,
+"name": &"dissipate",
+"speed": 5.0
+}]
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_augfd"]
+particles_animation = true
+particles_anim_h_frames = 2
+particles_anim_v_frames = 2
+particles_anim_loop = false
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_rsyq6"]
+particle_flag_rotate_y = true
+particle_flag_disable_z = true
+angle_min = 1.07288e-05
+angle_max = 360.0
+velocity_pivot = Vector3(1, 0, 0)
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 5.0
+initial_velocity_max = 25.0
+gravity = Vector3(0, 0, 0)
+
+[node name="projectile" type="Area2D"]
+script = ExtResource("1_f8cdk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -0.25)
+shape = SubResource("RectangleShape2D_yr2qt")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.25
+one_shot = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_h15bx")
+
+[node name="DeathTimer" type="Timer" parent="."]
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+material = SubResource("CanvasItemMaterial_augfd")
+amount = 64
+texture = ExtResource("9_augfd")
+process_material = SubResource("ParticleProcessMaterial_rsyq6")
+script = ExtResource("10_0iiay")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="DeathTimer" to="." method="_on_death_timer_timeout"]

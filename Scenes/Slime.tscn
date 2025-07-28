@@ -1,71 +1,62 @@
-[gd_scene load_steps=21 format=3 uid="uid://c7v0pq4ks7lap"]
+[gd_scene load_steps=18 format=3 uid="uid://c7v0pq4ks7lap"]
 
 [ext_resource type="Script" uid="uid://xnsjwev6v4nk" path="res://Scripts/slime_body.gd" id="1_p1xxi"]
-[ext_resource type="Texture2D" uid="uid://bhf6ivgu2bfwn" path="res://assets/MysticWoods/Enemies/slime.png" id="2_7yyg5"]
+[ext_resource type="Texture2D" uid="uid://pcgb4qxgvq44" path="res://assets/slimefrfr.png" id="2_p1xxi"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7yyg5"]
+atlas = ExtResource("2_p1xxi")
+region = Rect2(0, 16, 11, 7)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xsyo3"]
-atlas = ExtResource("2_7yyg5")
-region = Rect2(0, 384, 32, 32)
+atlas = ExtResource("2_p1xxi")
+region = Rect2(11, 16, 11, 7)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oi5nh"]
-atlas = ExtResource("2_7yyg5")
-region = Rect2(32, 384, 32, 32)
+atlas = ExtResource("2_p1xxi")
+region = Rect2(22, 16, 11, 7)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qmdr4"]
-atlas = ExtResource("2_7yyg5")
-region = Rect2(64, 384, 32, 32)
+atlas = ExtResource("2_p1xxi")
+region = Rect2(33, 16, 11, 7)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3mnvw"]
-atlas = ExtResource("2_7yyg5")
-region = Rect2(96, 384, 32, 32)
+atlas = ExtResource("2_p1xxi")
+region = Rect2(0, 0, 11, 7)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_h65gf"]
-atlas = ExtResource("2_7yyg5")
-region = Rect2(128, 384, 32, 32)
+atlas = ExtResource("2_p1xxi")
+region = Rect2(11, 0, 11, 7)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ri7b6"]
-atlas = ExtResource("2_7yyg5")
-region = Rect2(0, 0, 32, 32)
+atlas = ExtResource("2_p1xxi")
+region = Rect2(22, 0, 11, 7)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tu4ju"]
-atlas = ExtResource("2_7yyg5")
-region = Rect2(32, 0, 32, 32)
+atlas = ExtResource("2_p1xxi")
+region = Rect2(33, 0, 11, 7)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ki3du"]
-atlas = ExtResource("2_7yyg5")
-region = Rect2(64, 0, 32, 32)
+atlas = ExtResource("2_p1xxi")
+region = Rect2(0, 8, 11, 7)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_j3rtx"]
-atlas = ExtResource("2_7yyg5")
-region = Rect2(96, 0, 32, 32)
+atlas = ExtResource("2_p1xxi")
+region = Rect2(11, 8, 11, 7)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yifxl"]
-atlas = ExtResource("2_7yyg5")
-region = Rect2(0, 128, 32, 32)
+atlas = ExtResource("2_p1xxi")
+region = Rect2(22, 8, 11, 7)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_34uwb"]
-atlas = ExtResource("2_7yyg5")
-region = Rect2(32, 128, 32, 32)
+atlas = ExtResource("2_p1xxi")
+region = Rect2(33, 8, 11, 7)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_qm87h"]
-atlas = ExtResource("2_7yyg5")
-region = Rect2(64, 128, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_qa8qf"]
-atlas = ExtResource("2_7yyg5")
-region = Rect2(96, 128, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_g73w3"]
-atlas = ExtResource("2_7yyg5")
-region = Rect2(128, 128, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_paogw"]
-atlas = ExtResource("2_7yyg5")
-region = Rect2(160, 128, 32, 32)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_hdxgk"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_oi5nh"]
 animations = [{
 "frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7yyg5")
+}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_xsyo3")
 }, {
@@ -74,67 +65,40 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_qmdr4")
+}],
+"loop": true,
+"name": &"attack",
+"speed": 5.0
 }, {
+"frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_3mnvw")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_h65gf")
-}],
-"loop": false,
-"name": &"death",
-"speed": 5.0
 }, {
-"frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ri7b6")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_tu4ju")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ki3du")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_j3rtx")
 }],
 "loop": true,
 "name": &"idle",
 "speed": 5.0
 }, {
-"frames": [],
-"loop": true,
-"name": &"new_animation_4",
-"speed": 5.0
-}, {
-"frames": [],
-"loop": true,
-"name": &"new_animation_5",
-"speed": 5.0
-}, {
-"frames": [],
-"loop": true,
-"name": &"new_animation_6",
-"speed": 5.0
-}, {
 "frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ki3du")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j3rtx")
+}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_yifxl")
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_34uwb")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_qm87h")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_qa8qf")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_g73w3")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_paogw")
 }],
 "loop": true,
 "name": &"walk",
@@ -153,9 +117,8 @@ radius = 219.185
 script = ExtResource("1_p1xxi")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="slimeBody"]
-sprite_frames = SubResource("SpriteFrames_hdxgk")
-animation = &"idle"
-autoplay = "idle"
+sprite_frames = SubResource("SpriteFrames_oi5nh")
+animation = &"walk"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="slimeBody"]
 shape = SubResource("CircleShape2D_i2uv7")
@@ -167,6 +130,11 @@ collision_mask = 2
 [node name="CollisionShape2D" type="CollisionShape2D" parent="slimeBody/detection_area"]
 shape = SubResource("CircleShape2D_oggg7")
 
+[node name="StunTimer" type="Timer" parent="slimeBody"]
+wait_time = 5.0
+one_shot = true
+
 [connection signal="area_entered" from="slimeBody/detection_area" to="slimeBody" method="_on_detection_area_area_entered"]
 [connection signal="body_entered" from="slimeBody/detection_area" to="slimeBody" method="_on_detection_area_body_entered"]
 [connection signal="body_exited" from="slimeBody/detection_area" to="slimeBody" method="_on_detection_area_body_exited"]
+[connection signal="timeout" from="slimeBody/StunTimer" to="slimeBody" method="_on_stun_timer_timeout"]

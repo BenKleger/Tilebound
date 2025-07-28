@@ -1,7 +1,13 @@
-[gd_scene load_steps=10 format=3 uid="uid://bbis8ibrragw4"]
+[gd_scene load_steps=26 format=3 uid="uid://bbis8ibrragw4"]
 
-[ext_resource type="Texture2D" uid="uid://cte2ucm1f1lmp" path="res://assets/player.png" id="2_6t5aa"]
+[ext_resource type="Texture2D" uid="uid://fynhru63q73l" path="res://assets/ranger spritesheet calciumtrice (1).png" id="2_8erm5"]
+[ext_resource type="Texture2D" uid="uid://8ncoa3m458jc" path="res://assets/demon/Demon.png" id="2_cvnsp"]
+[ext_resource type="Texture2D" uid="uid://bo3xdyq5x4elm" path="res://assets/demon/Demon Char_0001.png" id="3_3smsa"]
 [ext_resource type="Script" uid="uid://do4dnn27yl4p7" path="res://Scripts/body.gd" id="3_6t5aa"]
+[ext_resource type="Texture2D" uid="uid://df75c7cyqcy7q" path="res://assets/demon/Demon Char_0002.png" id="4_8erm5"]
+[ext_resource type="Texture2D" uid="uid://djjxdm8m0yhlr" path="res://assets/demon/Demon Char_0003.png" id="5_f1ek2"]
+[ext_resource type="Texture2D" uid="uid://cxg0n30q0k7f1" path="res://assets/demon/Demon Char_0004.png" id="6_tx1dd"]
+[ext_resource type="Texture2D" uid="uid://dcgoupov4mwb7" path="res://assets/demon/Demon Char_0005.png" id="7_gymyn"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_fkybt"]
 radius = 9.8
@@ -59,15 +65,110 @@ _data = {
 &"jump!": SubResource("Animation_cvnsp")
 }
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_f1ek2"]
+atlas = ExtResource("2_8erm5")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tx1dd"]
+atlas = ExtResource("2_8erm5")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gymyn"]
+atlas = ExtResource("2_8erm5")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pu2lt"]
+atlas = ExtResource("2_8erm5")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ukyrk"]
+atlas = ExtResource("2_8erm5")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7dp3o"]
+atlas = ExtResource("2_8erm5")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h4iuc"]
+atlas = ExtResource("2_8erm5")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fd4e3"]
+atlas = ExtResource("2_8erm5")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qqcod"]
+atlas = ExtResource("2_8erm5")
+region = Rect2(256, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_igrcy"]
+atlas = ExtResource("2_8erm5")
+region = Rect2(288, 0, 32, 32)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_fkybt"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_6t5aa")
+"texture": ExtResource("2_cvnsp")
 }],
 "loop": true,
-"name": &"player :)",
+"name": &"idle",
 "speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_f1ek2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tx1dd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gymyn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pu2lt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ukyrk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7dp3o")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_h4iuc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fd4e3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qqcod")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_igrcy")
+}],
+"loop": true,
+"name": &"ranger idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_tx1dd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_gymyn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_8erm5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_f1ek2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_3smsa")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 10.0
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6t5aa"]
@@ -76,6 +177,7 @@ radius = 13.4134
 [node name="Player" type="Node2D"]
 
 [node name="body" type="CharacterBody2D" parent="."]
+visible = false
 collision_layer = 3
 floor_stop_on_slope = false
 floor_block_on_wall = false
@@ -87,6 +189,7 @@ script = ExtResource("3_6t5aa")
 shape = SubResource("CircleShape2D_fkybt")
 
 [node name="Camera2D" type="Camera2D" parent="body"]
+zoom = Vector2(2, 2)
 
 [node name="DashCD" type="Timer" parent="body"]
 process_callback = 0
@@ -113,7 +216,7 @@ libraries = {
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="body"]
 sprite_frames = SubResource("SpriteFrames_fkybt")
-animation = &"player :)"
+animation = &"idle"
 
 [node name="PlayerHitbox" type="Area2D" parent="body"]
 
@@ -129,12 +232,16 @@ process_callback = 0
 wait_time = 1.5
 one_shot = true
 
-[node name="GrappleTimeoutTimer" type="Timer" parent="body"]
-wait_time = 2.0
+[node name="DamageTimer" type="Timer" parent="body"]
+wait_time = 0.25
 one_shot = true
 
-[node name="GrappleReadyTimer" type="Timer" parent="body"]
-wait_time = 3.0
+[node name="ShootTimer" type="Timer" parent="body"]
+wait_time = 0.5
+one_shot = true
+
+[node name="DashActiveTimer" type="Timer" parent="body"]
+wait_time = 0.25
 one_shot = true
 
 [connection signal="timeout" from="body/DashCD" to="body" method="_on_dash_cd_timeout"]
@@ -145,5 +252,6 @@ one_shot = true
 [connection signal="body_exited" from="body/PlayerHitbox" to="body" method="_on_player_hitbox_body_exited"]
 [connection signal="timeout" from="body/FallingTimer" to="body" method="_on_falling_timer_timeout"]
 [connection signal="timeout" from="body/JumpTimer4" to="body" method="jump_ready_timeout"]
-[connection signal="timeout" from="body/GrappleTimeoutTimer" to="body" method="_on_grapple_timer_timeout"]
-[connection signal="timeout" from="body/GrappleReadyTimer" to="body" method="_on_grapple_ready_timer_timeout"]
+[connection signal="timeout" from="body/DamageTimer" to="body" method="_on_damage_timer_timeout"]
+[connection signal="timeout" from="body/ShootTimer" to="body" method="_on_shoot_timer_timeout"]
+[connection signal="timeout" from="body/DashActiveTimer" to="body" method="_on_dash_active_timer_timeout"]

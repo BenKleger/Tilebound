@@ -1,24 +1,67 @@
-[gd_scene load_steps=4 format=3 uid="uid://cg01335krfrqj"]
+[gd_scene load_steps=6 format=3 uid="uid://cg01335krfrqj"]
 
 [ext_resource type="Script" uid="uid://dvyryn2e8p4ry" path="res://Scripts/grappling_hook.gd" id="1_pmbmu"]
-[ext_resource type="Texture2D" uid="uid://bupe6gpi3wj61" path="res://assets/icon.svg" id="2_hfu38"]
+[ext_resource type="Texture2D" uid="uid://dabyh8tu8f4ps" path="res://assets/GrapplingHook.png" id="2_iay3k"]
+[ext_resource type="Texture2D" uid="uid://cjerha44uy1le" path="res://assets/particles/white_pixel.png" id="3_4maln"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xv4oh"]
-radius = 2.0
+radius = 0.417837
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_4bvg0"]
+lifetime_randomness = 0.2
+particle_flag_disable_z = true
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(0, 0, 0)
+spread = 180.0
+initial_velocity_min = 15.0
+initial_velocity_max = 35.0
+gravity = Vector3(0, 25, 0)
 
 [node name="GrapplingHook" type="CharacterBody2D"]
+collision_layer = 2
 script = ExtResource("1_pmbmu")
-metadata/_edit_group_ = true
 
 [node name="GrappleArea" type="Area2D" parent="."]
+position = Vector2(-2.1682, 0.24012)
+scale = Vector2(4.375, 4.375)
 
-[node name="GrappleCollisionShape" type="CollisionShape2D" parent="GrappleArea"]
+[node name="GrappleAreaShape" type="CollisionShape2D" parent="GrappleArea"]
+position = Vector2(0.524432, 0.0161695)
+scale = Vector2(4.375, 4.375)
 shape = SubResource("CircleShape2D_xv4oh")
-
-[node name="Sprite2D" type="Sprite2D" parent="GrappleArea"]
-scale = Vector2(0.0351563, 0.03125)
-texture = ExtResource("2_hfu38")
 
 [node name="GrappleBody" type="CollisionShape2D" parent="."]
-scale = Vector2(0.75, 0.75)
+position = Vector2(-0.0290796, 0.358219)
+scale = Vector2(4.375, 4.375)
 shape = SubResource("CircleShape2D_xv4oh")
+disabled = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = 12
+position = Vector2(0.66572, 7.32562)
+rotation = 2.40157
+texture = ExtResource("2_iay3k")
+
+[node name="TimeoutTimer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+
+[node name="CooldownTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="ThrowTimer" type="Timer" parent="."]
+one_shot = true
+
+[node name="HitEffect" type="GPUParticles2D" parent="."]
+emitting = false
+amount = 16
+texture = ExtResource("3_4maln")
+one_shot = true
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_4bvg0")
+
+[connection signal="body_entered" from="GrappleArea" to="." method="_on_grapple_area_body_entered"]
+[connection signal="timeout" from="TimeoutTimer" to="." method="_on_timeout_timer_timeout"]
+[connection signal="timeout" from="CooldownTimer" to="." method="_on_cooldown_timer_timeout"]
+[connection signal="timeout" from="ThrowTimer" to="." method="_on_throw_timer_timeout"]
