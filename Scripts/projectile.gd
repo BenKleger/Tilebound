@@ -18,6 +18,9 @@ func _ready():
 	parallel_velocity = get_parallel_component(init_velocity, direction)
 	$Timer.start()
 	rotation = parallel_velocity.angle()
+	$AnimatedSprite2D.play("default")
+	if GlobalVariables.particles_on:
+		$TrailParticles.emitting = true
 
 #want relative motion, but also bullt travelling to where the destination is --> vector math prolly :)
 #so hear me out
@@ -45,9 +48,13 @@ func get_parallel_component(vector: Vector2, direction: Vector2) -> Vector2:
 	return direction_normalized * dot_product
 
 func kill():
+	if !GlobalVariables.particles_on:
+		$AnimatedSprite2D.play("dissipate")
 	killed = true
-	$GPUParticles2D.emitting = false
-	$AnimatedSprite2D.play("dissipate")
+	$TrailParticles.emitting = false
+	
+	
+	
 	$CollisionShape2D.set_deferred("disabled", true)
 	$DeathTimer.start()
 	#add some animation player stuffs
@@ -59,12 +66,20 @@ func _on_body_entered(body):
 	if(player_projectile):
 		#damage if it is an enemy
 		if(body.has_method("enemy")):
+			$AnimatedSprite2D.play("dead")
 			body.take_damage(damage)
+			$Timer.stop()
+			if GlobalVariables.particles_on:
+				$HitParticles.emitting = true
 			kill()
 			print(1)
 	else:
 		#damage it if it's a player
 		if(body.has_method("player")):
+			$Timer.stop()
+			if GlobalVariables.particles_on:
+				$HitParticles.emitting = true
+			$AnimatedSprite2D.play("dead")
 			body.enemy_attack(damage)
 			kill()
 			print(2)
@@ -73,6 +88,7 @@ func _on_body_entered(body):
 func _on_timer_timeout() -> void:
 	print("BulletTimer")
 	kill() # Replace with function body.
+	$AnimatedSprite2D.play("dissipate")
 
 
 func _on_death_timer_timeout() -> void:

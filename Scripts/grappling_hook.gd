@@ -9,7 +9,7 @@ var parallel_velocity : Vector2
 var hook_attached = false
 var enemy : Node2D
 
-@export var travel_time: float = 2
+@export var travel_time: float = 1
 
 var elapsed_time := 0.0
 
@@ -106,7 +106,7 @@ func  timeout(delta):
 	else:
 		global_position = displacement.lerp(target_position, t)
 		
-		rotation = (global_position - target_position).angle() + PI/2
+		rotation = (global_position - player.global_position).angle() + PI/2
 		if enemy:
 			enemy.global_position = global_position + Vector2.LEFT
 			enemy.rotation = rotation

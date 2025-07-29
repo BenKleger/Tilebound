@@ -44,7 +44,6 @@ rotation = 2.40157
 texture = ExtResource("2_iay3k")
 
 [node name="TimeoutTimer" type="Timer" parent="."]
-wait_time = 2.0
 one_shot = true
 
 [node name="CooldownTimer" type="Timer" parent="."]
