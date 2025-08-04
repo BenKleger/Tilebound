@@ -6,11 +6,12 @@ const dash_speed = 500
 const max_health = 100
 
 #variables
+var immune = false
 var dash_not_active = true
 var shoot_ready = true
 var damage_ready = true
 var ground_coefficent = 10
-var air_coefficent = 7
+var air_coefficent = 12
 var health = 100
 var dead = false
 var in_air = false
@@ -23,8 +24,10 @@ var last_input:Vector2 = Vector2.DOWN;
 #for enemy tracking purposes
 var last_position_on_ground:Vector2 = global_position
 var hook : CharacterBody2D
-
 #@export var friction_modifier = 0.95 # was used for previous movement engine
+@onready var particles := $DashParticles
+@onready var ParticleMaterial := particles.process_material as ParticleProcessMaterial
+@onready var player_body: CollisionShape2D = $PlayerBody
 
 func _ready():
 	call_deferred("spawn_grappling_hook")
@@ -82,23 +85,24 @@ func _process(delta):
 	
 	falling_check()
 	
-	#update position for enemy tracking
-	if ! in_air:
-		last_position_on_ground = global_position
 		
-	if velocity != Vector2.ZERO:
-		$AnimatedSprite2D.play("walk")
-	else:
-		$AnimatedSprite2D.play("idle")
 
 #TODO Bounce Pad
 #TODO Summoning
 #TODO Fix grappling hook
 #TODO Fix size speed issue
 
+func animate():
+	if velocity != Vector2.ZERO:
+		$AnimatedSprite2D.play("walk")
+	else:
+		$AnimatedSprite2D.play("idle")
 
 func falling_check():
-	pass
+	#update position for enemy tracking
+	if ! in_air:
+		last_position_on_ground = global_position
+
 	#if(in_air):
 		#pass
 	#else:
@@ -115,16 +119,17 @@ func fall():
 	$FallingTimer.start()
 
 func take_damage(damage: int):
-	if (health-damage<=0):
-		health = 0
-		print("Player has died")
-		kill()
-	else:
-		health -= damage;
-		print("ENEMY HAS ATTACKeD! Health is now: ", health)
-		#start damage timer
-		damage_ready = false
-		$DamageTimer.start()
+	if !immune:
+		if (health-damage<=0):
+			health = 0
+			print("Player has died")
+			kill()
+		else:
+			health -= damage;
+			print("ENEMY HAS ATTACKeD! Health is now: ", health)
+			#start damage timer
+			damage_ready = false
+			$DamageTimer.start()
 		
 #old script
 #would take negative damage to heal sucessfully
@@ -200,6 +205,8 @@ func get_veloc(input: Vector2, delta) -> void:
 		else:
 			velocity.x = input.x * speed * ground_coefficent
 			velocity.y = input.y * speed * ground_coefficent
+		
+
 	else:
 		#dash is active
 		pass #keep velocity constant
@@ -223,6 +230,8 @@ func get_veloc(input: Vector2, delta) -> void:
 	#else:
 		#velocity.x = velocity.x + floor(input.x)*.5
 		#velocity.y = velocity.y + floor(input.y)*.5
+
+
 
 func input_reader():
 	if(Input.is_action_pressed("jump")): 
@@ -249,12 +258,30 @@ func jump():
 
 func dash():
 	if (dash_ready == true):
+		immune = true
+		player_body.disabled = true
 		dash_ready = false
 		dash_not_active = false
 		$DashCD.start()
 		$DashActiveTimer.start()
 		velocity = dash_speed * last_input
 		velocity = dash_speed * last_input
+		dash_effects()
+
+func dash_effects():
+	var angle = rad_to_deg(last_input.angle())
+	#fucking dumb ass fix for the cursed issue with rotation
+	if(velocity.y != 0 && velocity.x != 0):
+		# Diagonal — use actual angle
+		ParticleMaterial.angle_min = angle - 5
+		ParticleMaterial.angle_max = angle + 5
+	else:
+		# Cardinal — offset 90° to align visuals
+		ParticleMaterial.angle_min = angle + 85
+		ParticleMaterial.angle_max = angle + 95
+	particles.restart()
+	$DashParticles.emitting = true
+
 
 func shoot():
 	print("shoot sent")
@@ -350,5 +377,7 @@ func _on_shoot_timer_timeout() -> void:
 
 
 func _on_dash_active_timer_timeout() -> void:
+	immune = false
+	player_body.disabled = false
 	dash_not_active = true # Replace with function body.
 	velocity = Vector2.ZERO

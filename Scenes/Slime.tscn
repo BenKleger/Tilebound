@@ -1,7 +1,9 @@
-[gd_scene load_steps=18 format=3 uid="uid://c7v0pq4ks7lap"]
+[gd_scene load_steps=22 format=3 uid="uid://c7v0pq4ks7lap"]
 
 [ext_resource type="Script" uid="uid://xnsjwev6v4nk" path="res://Scripts/slime_body.gd" id="1_p1xxi"]
 [ext_resource type="Texture2D" uid="uid://pcgb4qxgvq44" path="res://assets/slimefrfr.png" id="2_p1xxi"]
+[ext_resource type="Texture2D" uid="uid://dygnytcyrpse1" path="res://assets/particles/yellow_swirl.png" id="3_xsyo3"]
+[ext_resource type="Gradient" uid="uid://83eii40qnxk8" path="res://textures/new_gradient.tres" id="4_oi5nh"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7yyg5"]
 atlas = ExtResource("2_p1xxi")
@@ -111,6 +113,20 @@ radius = 6.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_oggg7"]
 radius = 219.185
 
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_qmdr4"]
+gradient = ExtResource("4_oi5nh")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_3mnvw"]
+particle_flag_disable_z = true
+emission_shape = 1
+emission_sphere_radius = 5.0
+angle_min = -90.0
+angle_max = 90.0
+gravity = Vector3(0, -20, 0)
+scale_min = 0.5
+scale_max = 0.5
+color_ramp = SubResource("GradientTexture1D_qmdr4")
+
 [node name="slime" type="Node2D"]
 
 [node name="slimeBody" type="CharacterBody2D" parent="."]
@@ -133,6 +149,12 @@ shape = SubResource("CircleShape2D_oggg7")
 [node name="StunTimer" type="Timer" parent="slimeBody"]
 wait_time = 5.0
 one_shot = true
+
+[node name="StunParticles" type="GPUParticles2D" parent="slimeBody"]
+emitting = false
+amount = 3
+texture = ExtResource("3_xsyo3")
+process_material = SubResource("ParticleProcessMaterial_3mnvw")
 
 [connection signal="area_entered" from="slimeBody/detection_area" to="slimeBody" method="_on_detection_area_area_entered"]
 [connection signal="body_entered" from="slimeBody/detection_area" to="slimeBody" method="_on_detection_area_body_entered"]

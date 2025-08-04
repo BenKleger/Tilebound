@@ -19,8 +19,8 @@ func _ready():
 	$Timer.start()
 	rotation = parallel_velocity.angle()
 	$AnimatedSprite2D.play("default")
-	if GlobalVariables.particles_on:
-		$TrailParticles.emitting = true
+	if !GlobalVariables.particles_on:
+		$TrailParticles.emitting = false
 
 #want relative motion, but also bullt travelling to where the destination is --> vector math prolly :)
 #so hear me out
@@ -66,7 +66,7 @@ func _on_body_entered(body):
 	if(player_projectile):
 		#damage if it is an enemy
 		if(body.has_method("enemy")):
-			$AnimatedSprite2D.play("dead")
+			$AnimatedSprite2D.hide()
 			body.take_damage(damage)
 			$Timer.stop()
 			if GlobalVariables.particles_on:

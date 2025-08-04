@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://r8edqtgxm5oh"]
+[gd_scene load_steps=21 format=3 uid="uid://r8edqtgxm5oh"]
 
 [ext_resource type="Script" uid="uid://dcv5cgfjx588v" path="res://Scripts/projectile.gd" id="1_f8cdk"]
 [ext_resource type="Texture2D" uid="uid://cywbhb4nf7i8g" path="res://assets/particles/red_pixel.png" id="2_d6p7i"]
@@ -17,14 +17,6 @@ size = Vector2(14, 12.5)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_h15bx"]
 animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("2_d6p7i")
-}],
-"loop": true,
-"name": &"dead",
-"speed": 5.0
-}, {
 "frames": [{
 "duration": 1.0,
 "texture": ExtResource("2_rsyq6")
@@ -66,11 +58,30 @@ particles_anim_h_frames = 2
 particles_anim_v_frames = 2
 particles_anim_loop = false
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_ovs0d"]
+[sub_resource type="Gradient" id="Gradient_d6p7i"]
+offsets = PackedFloat32Array(0, 0.385768, 1)
+colors = PackedColorArray(0.321728, 0.321728, 0.321728, 1, 1, 1, 1, 0.72549, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ovs0d"]
+gradient = SubResource("Gradient_d6p7i")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ay8ps"]
 particle_flag_disable_z = true
-gravity = Vector3(0, 98, 0)
+spread = 180.0
+initial_velocity_max = 14.75
+gravity = Vector3(0, 0, 0)
+scale_min = 2.0
+scale_max = 3.0
+color_ramp = SubResource("GradientTexture1D_ovs0d")
+hue_variation_min = -0.12
+hue_variation_max = 0.2
+
+[sub_resource type="Gradient" id="Gradient_ovs0d"]
+offsets = PackedFloat32Array(0, 0.674157, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0.00145701, 1.04299e-06, 0.00343043, 1, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_ay8ps"]
+gradient = SubResource("Gradient_ovs0d")
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_akv1x"]
 particle_flag_disable_z = true
@@ -80,6 +91,7 @@ initial_velocity_min = 25.0
 initial_velocity_max = 50.0
 gravity = Vector3(0, 0, 0)
 scale_max = 3.0
+color_ramp = SubResource("GradientTexture1D_ay8ps")
 
 [node name="projectile" type="Area2D"]
 script = ExtResource("1_f8cdk")
@@ -94,15 +106,14 @@ one_shot = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_h15bx")
-animation = &"dissipate"
 
 [node name="DeathTimer" type="Timer" parent="."]
 
 [node name="TrailParticles" type="GPUParticles2D" parent="."]
 material = SubResource("CanvasItemMaterial_augfd")
-emitting = false
 amount = 64
-texture = SubResource("ViewportTexture_ovs0d")
+texture = ExtResource("2_d6p7i")
+collision_base_size = 2.0
 process_material = SubResource("ParticleProcessMaterial_ay8ps")
 script = ExtResource("10_0iiay")
 

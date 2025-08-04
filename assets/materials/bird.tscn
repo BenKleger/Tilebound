@@ -1,0 +1,122 @@
+[gd_scene load_steps=9 format=3 uid="uid://g8xfhihqkhjb"]
+
+[ext_resource type="Script" uid="uid://6ex6hn6pjud0" path="res://character_body_2d.gd" id="1_lx3qe"]
+[ext_resource type="Texture2D" uid="uid://c7d81bue26pt7" path="res://assets/birds/╛▐╣½╗⌡1.png" id="2_15jtq"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ix7pf"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"wing_down",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_15jtq")
+}],
+"loop": true,
+"name": &"wing_up",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ui7hi"]
+radius = 34.1
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_46kn7"]
+radius = 219.185
+
+[sub_resource type="Animation" id="Animation_tkan7"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:animation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [&"walk"]
+}
+
+[sub_resource type="Animation" id="Animation_fo8or"]
+resource_name = "fly"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.6, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 20), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:animation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.366667, 0.6, 0.833333),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [&"wing_up", &"wing_up", &"wing_down", &"wing_up"]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_w5b46"]
+_data = {
+&"RESET": SubResource("Animation_tkan7"),
+&"fly": SubResource("Animation_fo8or")
+}
+
+[node name="bird" type="CharacterBody2D"]
+script = ExtResource("1_lx3qe")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_ix7pf")
+animation = &"walk"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_ui7hi")
+
+[node name="detection_area" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="detection_area"]
+position = Vector2(2, 5)
+shape = SubResource("CircleShape2D_46kn7")
+
+[node name="StunTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="StunnedLabel" type="Label" parent="."]
+visible = false
+offset_left = -9.0
+offset_top = -12.0
+offset_right = 61.0
+offset_bottom = 10.3333
+scale = Vector2(0.25, 0.25)
+text = "Stunned!"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_w5b46")
+}

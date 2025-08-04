@@ -76,7 +76,7 @@ func stun():
 	print("Enemy is Stunned!")
 	stunned = true
 	$StunTimer.start()
-	
+	$StunParticles.emitting = true
 
 func idle(delta):
 	if !stunned:
@@ -125,4 +125,5 @@ func enemy():
 
 
 func _on_stun_timer_timeout() -> void:
-	stunned = false # Replace with function body.
+	stunned = false 
+	$StunParticles.emitting = false  
