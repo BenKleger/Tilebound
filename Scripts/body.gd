@@ -6,6 +6,7 @@ const dash_speed = 500
 const max_health = 100
 
 #variables
+var spread = 0.05 #for bullet, 1 ~ 180 degree spread
 var immune = false
 var dash_not_active = true
 var shoot_ready = true
@@ -84,7 +85,6 @@ func _process(delta):
 	enemy_attack()
 	
 	falling_check()
-	
 		
 
 #TODO Bounce Pad
@@ -270,25 +270,29 @@ func dash():
 
 func dash_effects():
 	var angle = rad_to_deg(last_input.angle())
-	#fucking dumb ass fix for the cursed issue with rotation
+	##fucking dumb ass fix for the cursed issue with rotation
 	if(velocity.y != 0 && velocity.x != 0):
 		# Diagonal — use actual angle
+		angle = -angle +90
 		ParticleMaterial.angle_min = angle - 5
 		ParticleMaterial.angle_max = angle + 5
 	else:
 		# Cardinal — offset 90° to align visuals
 		ParticleMaterial.angle_min = angle + 85
+		print(ParticleMaterial.angle_min )
 		ParticleMaterial.angle_max = angle + 95
 	particles.restart()
 	$DashParticles.emitting = true
-
+#
 
 func shoot():
 	print("shoot sent")
 	if(shoot_ready):
 		var bullet = preload("res://Scenes/Projectile.tscn").instantiate()
 		bullet.position = global_position
-		bullet.direction = get_global_mouse_position()-global_position
+		var temp = (get_global_mouse_position()-global_position).normalized()
+		bullet.direction.x = randf_range(temp.x-spread,temp.x+spread)
+		bullet.direction.y = randf_range(temp.y-spread,temp.y+spread)
 		bullet.init_velocity = velocity
 		bullet.damage = 5
 		bullet.player_projectile = true

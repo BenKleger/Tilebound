@@ -73,6 +73,7 @@ grow_vertical = 2
 script = ExtResource("1_bo1nx")
 
 [node name="Background" type="Panel" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -81,6 +82,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="BigBox" type="VBoxContainer" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.2
@@ -292,7 +294,6 @@ text = "Back
 "
 
 [node name="Credits" type="Panel" parent="."]
-visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.1
@@ -324,84 +325,23 @@ theme_override_font_sizes/font_size = 32
 text = "Credits"
 horizontal_alignment = 1
 
-[node name="MenuMusicVolumeContainer" type="HBoxContainer" parent="Credits/VBoxContainer"]
+[node name="Label2" type="Label" parent="Credits/VBoxContainer"]
 layout_mode = 2
 
-[node name="Menu Music" type="Label" parent="Credits/VBoxContainer/MenuMusicVolumeContainer"]
-custom_minimum_size = Vector2(200, 30)
-layout_mode = 2
-text = "Menu Music Volume"
-vertical_alignment = 1
-
-[node name="MenuAudioControl" type="HSlider" parent="Credits/VBoxContainer/MenuMusicVolumeContainer"]
-custom_minimum_size = Vector2(100, 30)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/slider = SubResource("StyleBoxLine_8gbba")
-theme_override_styles/grabber_area = SubResource("StyleBoxLine_jjvhh")
-theme_override_styles/grabber_area_highlight = SubResource("StyleBoxLine_jjvhh")
-max_value = 1.0
-step = 0.05
-value = 1.0
-script = ExtResource("3_jjvhh")
-audio_bus_name = "Menu Music"
-
-[node name="GameMusicVolumeContainer" type="HBoxContainer" parent="Credits/VBoxContainer"]
+[node name="Label3" type="Label" parent="Credits/VBoxContainer"]
 layout_mode = 2
 
-[node name="Game Music" type="Label" parent="Credits/VBoxContainer/GameMusicVolumeContainer"]
-custom_minimum_size = Vector2(200, 30)
-layout_mode = 2
-text = "Game Music Volume"
-vertical_alignment = 1
-
-[node name="GameAudioControl" type="HSlider" parent="Credits/VBoxContainer/GameMusicVolumeContainer"]
-custom_minimum_size = Vector2(100, 30)
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/slider = SubResource("StyleBoxLine_8gbba")
-theme_override_styles/grabber_area = SubResource("StyleBoxLine_jjvhh")
-theme_override_styles/grabber_area_highlight = SubResource("StyleBoxLine_jjvhh")
-max_value = 1.0
-step = 0.05
-value = 1.0
-script = ExtResource("4_21xkr")
-audio_bus_name = "Game Music"
-
-[node name="SFXContainer" type="HBoxContainer" parent="Credits/VBoxContainer"]
+[node name="Label4" type="Label" parent="Credits/VBoxContainer"]
 layout_mode = 2
 
-[node name="SFX" type="Label" parent="Credits/VBoxContainer/SFXContainer"]
-custom_minimum_size = Vector2(200, 30)
+[node name="Label5" type="Label" parent="Credits/VBoxContainer"]
 layout_mode = 2
-text = "Sound Effects Volume"
-vertical_alignment = 1
 
-[node name="SFXAudioControl" type="HSlider" parent="Credits/VBoxContainer/SFXContainer"]
-custom_minimum_size = Vector2(100, 30)
+[node name="Label6" type="Label" parent="Credits/VBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/slider = SubResource("StyleBoxLine_8gbba")
-theme_override_styles/grabber_area = SubResource("StyleBoxLine_jjvhh")
-theme_override_styles/grabber_area_highlight = SubResource("StyleBoxLine_jjvhh")
-max_value = 1.0
-step = 0.05
-value = 1.0
-script = ExtResource("3_jjvhh")
-audio_bus_name = "SFX"
 
-[node name="FullscreenControl" type="CheckButton" parent="Credits/VBoxContainer"]
+[node name="Label7" type="Label" parent="Credits/VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 3
-text = "Fullscreen"
-script = ExtResource("4_kry3j")
-
-[node name="Particle Effects Control" type="CheckButton" parent="Credits/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-button_pressed = true
-text = "Particle Effects"
-script = ExtResource("6_6bp64")
 
 [node name="Back" type="Button" parent="Credits/VBoxContainer"]
 layout_mode = 2
@@ -434,9 +374,4 @@ bus = &"Menu Music"
 [connection signal="toggled" from="Options/VBoxContainer/FullscreenControl" to="Options/VBoxContainer/FullscreenControl" method="_on_toggled"]
 [connection signal="toggled" from="Options/VBoxContainer/Particle Effects Control" to="Options/VBoxContainer/Particle Effects Control" method="_on_toggled"]
 [connection signal="pressed" from="Options/VBoxContainer/Back" to="." method="_on_back_pressed"]
-[connection signal="value_changed" from="Credits/VBoxContainer/MenuMusicVolumeContainer/MenuAudioControl" to="Credits/VBoxContainer/MenuMusicVolumeContainer/MenuAudioControl" method="_on_value_changed"]
-[connection signal="value_changed" from="Credits/VBoxContainer/GameMusicVolumeContainer/GameAudioControl" to="Credits/VBoxContainer/GameMusicVolumeContainer/GameAudioControl" method="_on_value_changed"]
-[connection signal="value_changed" from="Credits/VBoxContainer/SFXContainer/SFXAudioControl" to="Credits/VBoxContainer/SFXContainer/SFXAudioControl" method="_on_value_changed"]
-[connection signal="toggled" from="Credits/VBoxContainer/FullscreenControl" to="Credits/VBoxContainer/FullscreenControl" method="_on_toggled"]
-[connection signal="toggled" from="Credits/VBoxContainer/Particle Effects Control" to="Credits/VBoxContainer/Particle Effects Control" method="_on_toggled"]
 [connection signal="pressed" from="Credits/VBoxContainer/Back" to="." method="_on_back_pressed"]

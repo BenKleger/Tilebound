@@ -8,10 +8,18 @@ var image #??
 @export var sprite_texture: Texture2D
 @export var duration: float = 1
 @export var angular_velocity = 100
+
 var killed = false
 var init_velocity: Vector2
 var parallel_velocity: Vector2
 var direction: Vector2 = Vector2.RIGHT
+
+func instantiate(isprite_texture: Texture2D, iangular_velocity = 100, iduration: float = 1, ispeed: float = 400.0, idamage: int = 5):
+	speed = ispeed
+	angular_velocity = iangular_velocity 
+	sprite_texture = isprite_texture
+	duration = iduration
+	damage = idamage
 
 func _ready():
 	$Timer.wait_time = duration
