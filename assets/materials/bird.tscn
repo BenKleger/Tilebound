@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=3 uid="uid://g8xfhihqkhjb"]
 
-[ext_resource type="Script" uid="uid://6ex6hn6pjud0" path="res://character_body_2d.gd" id="1_lx3qe"]
+[ext_resource type="Script" uid="uid://6ex6hn6pjud0" path="res://Scripts/character_body_2d.gd" id="1_lx3qe"]
 [ext_resource type="Texture2D" uid="uid://c7d81bue26pt7" path="res://assets/birds/╛▐╣½╗⌡1.png" id="2_15jtq"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ix7pf"]

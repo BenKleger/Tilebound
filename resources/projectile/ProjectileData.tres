@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://cufcu5l3a54yt"]
+
+[ext_resource type="Script" uid="uid://d3r06cje6pq41" path="res://resources/rScripts/FireballData.gd" id="1_grafn"]
+
+[resource]
+script = ExtResource("1_grafn")
+speed = 400.0
+damage = 5
+duration = 1.0
+angular_velocity = 100

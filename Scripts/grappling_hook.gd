@@ -8,6 +8,9 @@ var throw_position : Vector2 = Vector2.ZERO
 var parallel_velocity : Vector2
 var hook_attached = false
 var enemy : Node2D
+var rotation_amount
+var rest_position
+
 
 @export var travel_time: float = 1
 
@@ -44,8 +47,8 @@ func idle_init():
 
 func idle():
 	if player:
-		global_position = get_grapple_rest_position()
-		rotation = (get_global_mouse_position() - player.global_position).angle() + PI/2
+		global_position = rest_position
+		rotation = (get_global_mouse_position()-rest_position).angle() + PI/2
 
 func throw_init(mouse_position, init_velocity):
 	direction = (mouse_position - global_position).normalized()
@@ -56,7 +59,7 @@ func throw_init(mouse_position, init_velocity):
 	
 	parallel_velocity = get_parallel_component(init_velocity, direction)
 	rotation = direction.angle() + PI/2
-	velocity = direction.normalized() * speed + parallel_velocity/4
+	velocity = direction.normalized() * speed + parallel_velocity/2
 	
 
 

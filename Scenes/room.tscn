@@ -1,0 +1,49 @@
+[gd_scene load_steps=5 format=3 uid="uid://33qkkqtqd0sk"]
+
+[ext_resource type="Script" uid="uid://bgx0v1wr4pibg" path="res://Scripts/room.gd" id="1_88gup"]
+[ext_resource type="TileSet" uid="uid://bouta76u8qas2" path="res://resources/mapstuffs/myTileSet.tres" id="2_lsht4"]
+[ext_resource type="Script" uid="uid://byuflhoqydns5" path="res://Scenes/temp_move.gd" id="3_fr46g"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mbine"]
+
+[node name="room" type="Node2D"]
+script = ExtResource("1_88gup")
+
+[node name="tilemap" type="Node2D" parent="."]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="tilemap"]
+tile_set = ExtResource("2_lsht4")
+
+[node name="Doors" type="Node2D" parent="."]
+
+[node name="DoorN" type="Area2D" parent="Doors"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/DoorN"]
+shape = SubResource("RectangleShape2D_mbine")
+
+[node name="DoorE" type="Area2D" parent="Doors"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/DoorE"]
+shape = SubResource("RectangleShape2D_mbine")
+
+[node name="DoorS" type="Area2D" parent="Doors"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/DoorS"]
+shape = SubResource("RectangleShape2D_mbine")
+
+[node name="DoorW" type="Area2D" parent="Doors"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/DoorW"]
+shape = SubResource("RectangleShape2D_mbine")
+
+[node name="EnemyContainer" type="Node2D" parent="."]
+
+[node name="temp move" type="Node2D" parent="."]
+script = ExtResource("3_fr46g")
+
+[node name="Camera2D" type="Camera2D" parent="temp move"]
+zoom = Vector2(2.5, 2.5)
+
+[node name="ColorRect" type="ColorRect" parent="temp move"]
+offset_right = 40.0
+offset_bottom = 40.0

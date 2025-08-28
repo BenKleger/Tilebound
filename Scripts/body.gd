@@ -6,7 +6,6 @@ const dash_speed = 500
 const max_health = 100
 
 #variables
-var spread = 0.05 #for bullet, 1 ~ 180 degree spread
 var immune = false
 var dash_not_active = true
 var shoot_ready = true
@@ -29,43 +28,10 @@ var hook : CharacterBody2D
 @onready var particles := $DashParticles
 @onready var ParticleMaterial := particles.process_material as ParticleProcessMaterial
 @onready var player_body: CollisionShape2D = $PlayerBody
+@onready var weapon_manager: Node2D = $WeaponManager
 
 func _ready():
-	call_deferred("spawn_grappling_hook")
-
-func spawn_grappling_hook():
-	print("\n=== Spawning grappling hook ===")
-
-	var HookScene = preload("res://Scenes/grappling_hook.tscn")
-	var hook_instance = HookScene.instantiate()
-
-	if hook_instance == null:
-		print("❌ Instantiation failed!")
-		return
-
-	hook = hook_instance
-
-	# Add a red box to ensure visibility
-
-	hook.global_position = Vector2(400, 300)  # hardcoded center
-	hook.rotation = (get_global_mouse_position() - global_position).angle()
-	hook.player = self
-
-	# Try both adding methods to guarantee it's in the tree
-	#add_child(hook)  # safest method if inside player
-	get_parent().add_child(hook)  # use this ONLY if needed
-
-	await get_tree().process_frame  # allow tree to update
-
-	print("hook: ", hook)
-	print("hook.get_parent(): ", hook.get_parent())
-	print("hook.is_inside_tree(): ", hook.is_inside_tree())
-	print("hook global_position: ", hook.global_position)
-
-	if hook.get_child_count() > 0:
-		print("✅ Hook has visible child!")
-	else:
-		print("❌ Hook has no children (invisible?)")
+	hook = weapon_manager.hook
 
 func player():
 	pass
@@ -87,10 +53,12 @@ func _process(delta):
 	falling_check()
 		
 
-#TODO Bounce Pad
+#TODO Bounce Pad --> with in air enemies add some form of retaliation --> shoot a homing projectile at them with the press of a button, using similar mechanics to the grapple return stuff to chase and scale in size properly.
 #TODO Summoning
 #TODO Fix grappling hook
 #TODO Fix size speed issue
+
+
 
 func animate():
 	if velocity != Vector2.ZERO:
@@ -279,36 +247,17 @@ func dash_effects():
 	else:
 		# Cardinal — offset 90° to align visuals
 		ParticleMaterial.angle_min = angle + 85
-		print(ParticleMaterial.angle_min )
 		ParticleMaterial.angle_max = angle + 95
 	particles.restart()
 	$DashParticles.emitting = true
 #
-
+ 
 func shoot():
-	print("shoot sent")
-	if(shoot_ready):
-		var bullet = preload("res://Scenes/Projectile.tscn").instantiate()
-		bullet.position = global_position
-		var temp = (get_global_mouse_position()-global_position).normalized()
-		bullet.direction.x = randf_range(temp.x-spread,temp.x+spread)
-		bullet.direction.y = randf_range(temp.y-spread,temp.y+spread)
-		bullet.init_velocity = velocity
-		bullet.damage = 5
-		bullet.player_projectile = true
-		#bullet.sprite_texture = preload("res://assets/bullet.png")
-		get_tree().current_scene.add_child(bullet)
-		shoot_ready = false
-		
-		$ShootTimer.start()
+	weapon_manager.shoot()
 
 func grapple_throw():
-	##TODO Grappling hook --> BRINGS MOBS to the player --> maybe a stun and free crit hit type deal
 	if(grapple_ready):
-		#1. THROW GRAPPLING HOOK
-		#send it with relative velocity towards the mouse / cursor 
-		print("throw sent")
-		hook.throw_init(get_global_mouse_position(), velocity)
+		weapon_manager.hook.throw_init(get_global_mouse_position(), velocity)
 		grapple_ready = false
 		grappling = true
 		#TODO Compatability -- if want it to be controller compatible will have to do some things
@@ -319,17 +268,6 @@ func grapple_throw():
 
 		#3. Grapple hook DOES connect -->conducted in grapple hook signal method and grappling hook code. 
 		
-	
-	pass
-
-
-
-	
-	#TODO set up another timer that sets grappling to false when the grapple hook returns to the player --> as is, you cant hook anyone on the return of it
-			#would need to figure out how to set up an exact amount of time when the grappling hook returns
-			#or could make it so the grappling hook is only 'alive' when the player sends it out, and just kill it when
-			#it returns to the player, colliding with the player's hitbox...
-	grappling = false
 
 
 func _on_jump_timer_timeout() -> void:
@@ -375,9 +313,6 @@ func _on_damage_timer_timeout() -> void:
 	damage_ready = true # Replace with function body.
 
 
-func _on_shoot_timer_timeout() -> void:
-	shoot_ready = true
-	pass # Replace with function body.
 
 
 func _on_dash_active_timer_timeout() -> void:

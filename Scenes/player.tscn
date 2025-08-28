@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://bbis8ibrragw4"]
+[gd_scene load_steps=40 format=3 uid="uid://bbis8ibrragw4"]
 
 [ext_resource type="Texture2D" uid="uid://fynhru63q73l" path="res://assets/ranger spritesheet calciumtrice (1).png" id="2_8erm5"]
 [ext_resource type="Texture2D" uid="uid://bo3xdyq5x4elm" path="res://assets/demon/Demon Char_0001.png" id="3_3smsa"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://cxg0n30q0k7f1" path="res://assets/demon/Demon Char_0004.png" id="6_tx1dd"]
 [ext_resource type="Texture2D" uid="uid://dcgoupov4mwb7" path="res://assets/demon/Demon Char_0005.png" id="7_gymyn"]
 [ext_resource type="Texture2D" uid="uid://cq7ypr0fgb6wl" path="res://assets/particles/white_line.png" id="9_f1ek2"]
+[ext_resource type="PackedScene" uid="uid://kvudqgta1wek" path="res://Scenes/weapon_manager.tscn" id="9_tx1dd"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_fkybt"]
 
@@ -291,10 +292,6 @@ one_shot = true
 wait_time = 0.25
 one_shot = true
 
-[node name="ShootTimer" type="Timer" parent="body"]
-wait_time = 0.5
-one_shot = true
-
 [node name="DashActiveTimer" type="Timer" parent="body"]
 wait_time = 0.25
 one_shot = true
@@ -311,6 +308,8 @@ lifetime = 0.3
 one_shot = true
 process_material = SubResource("ParticleProcessMaterial_tx1dd")
 
+[node name="WeaponManager" parent="body" instance=ExtResource("9_tx1dd")]
+
 [connection signal="timeout" from="body/DashCD" to="body" method="_on_dash_cd_timeout"]
 [connection signal="timeout" from="body/JumpTimer1" to="body" method="_on_jump_timer_timeout"]
 [connection signal="timeout" from="body/JumpTimer2" to="body" method="_on_jump_timer_2_timeout"]
@@ -320,5 +319,4 @@ process_material = SubResource("ParticleProcessMaterial_tx1dd")
 [connection signal="timeout" from="body/FallingTimer" to="body" method="_on_falling_timer_timeout"]
 [connection signal="timeout" from="body/JumpTimer4" to="body" method="jump_ready_timeout"]
 [connection signal="timeout" from="body/DamageTimer" to="body" method="_on_damage_timer_timeout"]
-[connection signal="timeout" from="body/ShootTimer" to="body" method="_on_shoot_timer_timeout"]
 [connection signal="timeout" from="body/DashActiveTimer" to="body" method="_on_dash_active_timer_timeout"]

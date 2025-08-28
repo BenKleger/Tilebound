@@ -19,6 +19,16 @@ config/icon="res://assets/icon.svg"
 
 GlobalVariables="*res://Scripts/global_variables.gd"
 
+[file_customization]
+
+folder_colors={
+"res://Scenes/": "yellow",
+"res://Scripts/": "green",
+"res://assets/": "red",
+"res://resources/": "orange",
+"res://textures/": "blue"
+}
+
 [gui]
 
 theme/default_font_multichannel_signed_distance_field=true

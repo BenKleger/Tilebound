@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://r8edqtgxm5oh"]
+[gd_scene load_steps=20 format=3 uid="uid://r8edqtgxm5oh"]
 
 [ext_resource type="Script" uid="uid://dcv5cgfjx588v" path="res://Scripts/projectile.gd" id="1_f8cdk"]
 [ext_resource type="Texture2D" uid="uid://cywbhb4nf7i8g" path="res://assets/particles/red_pixel.png" id="2_d6p7i"]
@@ -9,7 +9,6 @@
 [ext_resource type="Texture2D" uid="uid://bo2mdjwq62eet" path="res://assets/fireball/orb_dissipate___0005.png" id="6_ovs0d"]
 [ext_resource type="Texture2D" uid="uid://du8qmgmxb3idp" path="res://assets/fireball/orb_dissipate___0006.png" id="7_ay8ps"]
 [ext_resource type="Texture2D" uid="uid://o3fp2bil2ogt" path="res://assets/fireball/orb_dissipate___0007.png" id="8_akv1x"]
-[ext_resource type="Script" uid="uid://lwaelgplpyyg" path="res://Scripts/gpu_particles_2d.gd" id="10_0iiay"]
 [ext_resource type="Texture2D" uid="uid://cjerha44uy1le" path="res://assets/particles/white_pixel.png" id="10_d6p7i"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yr2qt"]
@@ -115,7 +114,6 @@ amount = 64
 texture = ExtResource("2_d6p7i")
 collision_base_size = 2.0
 process_material = SubResource("ParticleProcessMaterial_ay8ps")
-script = ExtResource("10_0iiay")
 
 [node name="HitParticles" type="GPUParticles2D" parent="."]
 modulate = Color(1, 0, 0, 1)
