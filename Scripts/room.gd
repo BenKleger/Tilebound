@@ -22,8 +22,6 @@ func _ready():
 	#pass
 	load_room()
 
-
-	
 func load_room():
 	print("Placing tile")
 	tile_map_layer.set_cell(Vector2i(0, 0), 2, Vector2i(0, 0)) # layer 0, coords (0,0), source ID 0
@@ -35,8 +33,6 @@ func load_room():
 	_fill_gaps()
 	_print_dungeon()
 
-
-	
 func _initialize_dungeon():
 	for x in dimensions.x:
 		dungeon.append([])
@@ -102,7 +98,6 @@ func _generate_branches():
 			branch_candidates.erase(candidate)
 
 func _generate_spawns():
-	pass
 	var spawns_created : int = 0
 	var spawn : Vector2i
 	while spawns_created < spawns and spawn_candidates.size():
@@ -112,7 +107,20 @@ func _generate_spawns():
 
 func spawn_enemy(location: Vector2i):
 	#TODO add a system where you spawn a mob and based off of the type spawned, it removes points from spawns corellating to its difficulty
+	
 	dungeon[location.x][location.y] = "E"
+	
+	tile_map_layer.to_global(location)
+	
+	
+
+func pick_enemy():
+	#TODO : select an enemy that is within the budget to spawn
+	
+	#set slime to be budget of 1
+	if spawns >= 1:
+		spawns -= 1
+		return preload("res://Scenes/Slime.tscn")
 
 func _fill_gaps():
 	#first pass
@@ -158,7 +166,7 @@ func _tile_placer(tile_position):
 	match marker:
 		"S": #start
 			tile_map_layer.set_cell(tile_position,2,Vector2i(1,base_tile))
-			$"temp move".position = tile_map_layer.map_to_local(tile_position)
+			$Player.position = tile_map_layer.map_to_local(tile_position)
 		0:  #nothing
 			pass
 		"C": #critical path
@@ -167,12 +175,12 @@ func _tile_placer(tile_position):
 			tile_map_layer.set_cell(tile_position,2,Vector2i(2,base_tile))
 			#spawn enemy
 			var slime = SLIME.instantiate()
+			print("Slime Spawned!")
 			slime.global_position = tile_map_layer.map_to_local(tile_position)
 
 
 		_: #default
 			tile_map_layer.set_cell(tile_position,2,Vector2i(0,base_tile))
-
 
 func setup(room_data: RoomData):
 	data = room_data
@@ -180,23 +188,15 @@ func setup(room_data: RoomData):
 	var difficulty = (data.depth + 1) * 2 
 	#ProceduralSpawner.spawn_enemies(difficulty, enemy_container)
 
-
-
-
-func on_all_enemies_defeated():
-	unlock_doors()
-
 func lock_doors():
 	pass
+
 	
-func pick_enemy(budget):
-	#TODO : select an enemy that is within the budget to spawn
-	return preload("res://Scenes/Slime.tscn")
-	
+
 func pick_random_position():
 	pass 
 	#TODO : random location for enemy spawn, must be set distance apart of other enemy spawns
-	
+
 
 #TODO : unlock all the doors, other than where you came from (as it collapsed)
 func unlock_doors():

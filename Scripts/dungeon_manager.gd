@@ -3,7 +3,6 @@ extends Node2D
 @export var room_scene: PackedScene      # base Room scene (procedural)
 @export var start_room_scene: PackedScene  # special starting room
 @export var boss_room_scene: PackedScene   # boss
-var current_room_id
 #chat
 
 
@@ -72,7 +71,6 @@ func load_room(id: int):
 	#if $CurrentRoom.get_child_count() > 0:
 		#$CurrentRoom.get_child(0).queue_free()
 #
-	#current_room_id = id
 	#
 	## Otherwise, generate a new one
 	#var data: RoomData = Room.data

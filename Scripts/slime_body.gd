@@ -20,7 +20,7 @@ var player = null
 var radius = 0
 var last_position_detected:Vector2 = Vector2.ZERO
 var is_moving_to_last_position := false
-var health = 10
+var health = 100
 var stunned = false
 
 func _ready():

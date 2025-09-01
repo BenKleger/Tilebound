@@ -6,7 +6,9 @@ const dash_speed = 500
 const max_health = 100
 
 #variables
+var on_ground : Array  = [true, true, true, true, true, true, true]
 var immune = false
+var falling = false
 var dash_not_active = true
 var shoot_ready = true
 var damage_ready = true
@@ -29,10 +31,14 @@ var hook : CharacterBody2D
 @onready var ParticleMaterial := particles.process_material as ParticleProcessMaterial
 @onready var player_body: CollisionShape2D = $PlayerBody
 @onready var weapon_manager: Node2D = $WeaponManager
+@onready var tilemap: Node2D = $"../../tilemap/TileMapLayer"
 
 func _ready():
 	hook = weapon_manager.hook
-
+	
+	print("Parent of Player is:", get_parent().get_parent().name)
+	
+	
 func player():
 	pass
 
@@ -70,19 +76,41 @@ func falling_check():
 	#update position for enemy tracking
 	if ! in_air:
 		last_position_on_ground = global_position
+	
+	
+	# Check if standing on a platform
+	var local_pos = tilemap.to_local(global_position)  # convert to TileMapLayer space
+	var tile_pos = tilemap.local_to_map(local_pos)
+	var tile_data = tilemap.get_cell_tile_data(tile_pos)
+	var on_platform = tile_data != null
+	#coyote time stuff
+	#want to check if the player is on the platform, put that in the 0th index of fall_check,
+	#but first move 0->1, 1->2, 2->3, 3->4
+	
+	if !in_air && dash_not_active:
+		for i in range(len(on_ground)-2,-1,-1):
+			on_ground[i+1] = on_ground[i]
+			 
+		on_ground[0] = on_platform
+		
+		if !on_ground_check():
+			if !falling:
+				fall()
+	
+	
+	
 
-	#if(in_air):
-		#pass
-	#else:
-	 ##check for if there is a tile below the player and if there isn't begin falling
-		#if(Input.is_action_pressed("ui_accept")):
-			#fall()
+func on_ground_check():
+	for i in on_ground:
+		if i == true:
+			return true
+	return false
+	
 
-func instantiate():
-	pass
 
 func fall():
-	in_air = true
+	falling = true
+	print("FALLING!")
 	$AnimationPlayer.play("falling")
 	$FallingTimer.start()
 
@@ -92,6 +120,8 @@ func take_damage(damage: int):
 			health = 0
 			print("Player has died")
 			kill()
+		elif (health - damage > max_health):
+			health = max_health
 		else:
 			health -= damage;
 			print("ENEMY HAS ATTACKeD! Health is now: ", health)
@@ -118,6 +148,10 @@ func kill():
 	pass
 	dead = true;
 	health = 0;
+	print("DEAD!!!!")
+	
+	#TODO add a fade to black first
+	get_tree().change_scene_to_file("res://scenes/main.tscn")
 
 func movement_direction_calculator():
 		var direction: Vector2 = Vector2.ZERO; 
@@ -202,14 +236,18 @@ func get_veloc(input: Vector2, delta) -> void:
 
 
 func input_reader():
-	if(Input.is_action_pressed("jump")): 
-		jump();
-	if(Input.is_action_pressed("dash")):
-		dash();
-	if(Input.is_action_pressed("grapple")):
-		grapple_throw()
-	if(Input.is_action_pressed("shoot")):
-		shoot()
+	if !falling:
+		if(Input.is_action_pressed("jump")): 
+			jump();
+		if(Input.is_action_pressed("dash")):
+			dash();
+		if(Input.is_action_pressed("grapple")):
+			grapple_throw()
+		if(Input.is_action_pressed("shoot")):
+			shoot()
+	else: 
+		velocity = Vector2.ZERO
+
 
 func jump():
 	if(jump_ready):

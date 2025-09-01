@@ -9,8 +9,8 @@ var active_weapons = []
 var shoot_ready : bool = true
 
 func _ready():
-	call_deferred("spawn_fireball_wand")
 	call_deferred("spawn_grappling_hook") #max 1
+	call_deferred("spawn_fireball_wand")
 	call_deferred("spawn_fireball_wand")
 	call_deferred("spawn_fireball_wand")
 	call_deferred("spawn_fireball_wand")
@@ -29,7 +29,7 @@ func _ready():
 	
 func _process(delta):
 	var n : int = 1
-	var r = 30
+	var r = 30*player.scale
 	var vec_r = - (global_position - get_global_mouse_position())
 	var theta_a=vec_r.angle()
 	for i in active_weapons:
@@ -49,7 +49,7 @@ func spawn_grappling_hook():
 	hook = HookScene.instantiate()
 	hook.rotation = (get_global_mouse_position() - global_position).angle()
 	hook.player = player
-	get_parent().get_parent().add_child(hook) 
+	get_parent().add_child(hook)
 	active_weapons.push_front(hook)
 
 func spawn_fireball_wand():
@@ -57,7 +57,7 @@ func spawn_fireball_wand():
 	fireballWand = fireball_wand.instantiate()
 	fireballWand.rotation = (get_global_mouse_position() - global_position).angle()
 	fireballWand.player = player
-	get_parent().get_parent().add_child(fireballWand) 
+	get_parent().add_child(fireballWand) 
 	active_weapons.append(fireballWand)
 
 
