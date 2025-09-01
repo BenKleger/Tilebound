@@ -55,7 +55,7 @@ _data = {
 }
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_6t5aa"]
-radius = 13.4134
+radius = 11.0
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_8erm5"]
 atlas = ExtResource("2_8erm5")
@@ -258,11 +258,11 @@ platform_wall_layers = 1
 script = ExtResource("3_6t5aa")
 
 [node name="PlayerBody" type="CollisionShape2D" parent="body"]
-position = Vector2(-3, 12)
+position = Vector2(0, -1)
 shape = SubResource("CircleShape2D_fkybt")
 
 [node name="Camera2D" type="Camera2D" parent="body"]
-zoom = Vector2(2, 2)
+zoom = Vector2(2.5, 2.5)
 
 [node name="DashCD" type="Timer" parent="body"]
 process_callback = 0
@@ -291,7 +291,6 @@ libraries = {
 [node name="PlayerHitbox" type="Area2D" parent="body"]
 
 [node name="HitboxShape" type="CollisionShape2D" parent="body/PlayerHitbox"]
-position = Vector2(1.49012e-08, -0.2)
 shape = SubResource("CircleShape2D_6t5aa")
 
 [node name="FallingTimer" type="Timer" parent="body"]
@@ -312,6 +311,7 @@ wait_time = 0.25
 one_shot = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="body"]
+position = Vector2(4, -26)
 sprite_frames = SubResource("SpriteFrames_fkybt")
 animation = &"walk"
 

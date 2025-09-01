@@ -18,6 +18,10 @@ const SLIME = preload("res://Scenes/Slime.tscn")
 
 @onready var tile_map_layer: TileMapLayer = $tilemap/TileMapLayer
 
+
+#TODO Add doors! lockable and making sure our rooms know their reward
+
+
 func _ready():
 	#pass
 	load_room()
@@ -123,6 +127,7 @@ func pick_enemy():
 		return preload("res://Scenes/Slime.tscn")
 
 func _fill_gaps():
+	#TODO This shit inefficent as fuck!!!
 	#first pass
 	for x in range(1,dimensions.x-1): #s.t. we dont break bounds
 		for y in range(1,dimensions.y-1):#s.t. we dont break bounds

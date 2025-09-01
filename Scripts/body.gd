@@ -1,8 +1,8 @@
 extends CharacterBody2D
 
 #Constants
-const speed = 20
-const dash_speed = 500
+const speed = 5
+const dash_speed = 250
 const max_health = 100
 
 #variables
@@ -79,10 +79,19 @@ func falling_check():
 	
 	
 	# Check if standing on a platform
-	var local_pos = tilemap.to_local(global_position)  # convert to TileMapLayer space
-	var tile_pos = tilemap.local_to_map(local_pos)
-	var tile_data = tilemap.get_cell_tile_data(tile_pos)
-	var on_platform = tile_data != null
+	#var local_pos = tilemap.to_local(global_position)  # convert to TileMapLayer space
+	#var tile_pos = tilemap.local_to_map(tilemap.to_local(global_position))
+	var tile_data  = tilemap.get_cell_tile_data(tilemap.local_to_map(tilemap.to_local(global_position)))
+	var tile_data1 = tilemap.get_cell_tile_data(tilemap.local_to_map(tilemap.to_local(global_position + Vector2.DOWN * 15)))
+	var tile_data2 = tilemap.get_cell_tile_data(tilemap.local_to_map(tilemap.to_local(global_position + Vector2.LEFT * 15)))
+	var tile_data3 = tilemap.get_cell_tile_data(tilemap.local_to_map(tilemap.to_local(global_position - Vector2.LEFT * 15)))
+	var tile_data4 = tilemap.get_cell_tile_data(tilemap.local_to_map(tilemap.to_local(global_position - Vector2.DOWN * 15)))
+	
+	var on_platform = tile_data != null or tile_data1 != null or tile_data2 != null or tile_data3 != null or tile_data4 != null 
+	#iterate thru all neighbouring tiles, if the player is on one of them, he's also safe from falling
+	
+	
+	
 	#coyote time stuff
 	#want to check if the player is on the platform, put that in the 0th index of fall_check,
 	#but first move 0->1, 1->2, 2->3, 3->4
@@ -155,7 +164,7 @@ func kill():
 
 func movement_direction_calculator():
 		var direction: Vector2 = Vector2.ZERO; 
-	##********
+	#stupid ahh fix for stupid ahh tiles
 	#var player_is_paused = false;
 	#if(player_is_paused):
 		#velocity.x = 0;
@@ -164,27 +173,19 @@ func movement_direction_calculator():
 	##x velocity calculation
 	#else:
 		if(Input.is_action_pressed("ui_left")):
-			if(Input.is_action_pressed("ui_right")):
-				direction.x = 0;
-			else:
+			if(!Input.is_action_pressed("ui_right")):
 				direction.x = -1.865;      
 				
 		else:
-		#2
 			if(Input.is_action_pressed("ui_right")):
 				direction.x = 1.865;
-			else:
-				direction.x = 0;
 		#Y direction calculation
 		if(Input.is_action_pressed("ui_up")):
-			direction.y = -1;
-			if(Input.is_action_pressed("ui_down")):
-				direction.y = 0 
+			if(!Input.is_action_pressed("ui_down")):
+				direction.y = -1;
 		else:
 			if(Input.is_action_pressed("ui_down")):
 				direction.y = 1;
-			else:
-				direction.y = 0;
 		#normalization   
 		#for normalization, as the map is (currently) a 16x32 setup, it would be nice if we moved 16 pixels up for every 32 horizontal while both are pressed.
 		#this would result in twice as much horizontal motion as vertical... can just update direction.x to 2 instead of 1 in all the lines above, and normalize it the same way :)
@@ -200,38 +201,39 @@ func movement_direction_calculator():
 func get_veloc(input: Vector2, delta) -> void:
 	
 	#all this stuff was mostly just from the previous game, want to make it more responsive movement, give some 'friction' in air keeping some velocity, not being perfectly responsive... unless?? just slowed down?
-	if dash_not_active:
-		if in_air:
-			velocity.x = input.x * speed * air_coefficent
-			velocity.y = input.y * speed * air_coefficent
-		else:
-			velocity.x = input.x * speed * ground_coefficent
-			velocity.y = input.y * speed * ground_coefficent
-		
-
-	else:
-		#dash is active
-		pass #keep velocity constant
-
-	##Horizontal movement code
-	##if player is on the ground, there is friction and movement speed is reduced by a modifier
-	#input.x = input.x * delta * speed * input_coefficient
-	#input.y = input.y * delta * speed * input_coefficient
-	#if !in_air:
-		##X stuff
+	#if dash_not_active:
+		#if in_air:
+			#velocity.x = input.x * speed * air_coefficent
+			#velocity.y = input.y * speed * air_coefficent
+		#else:
+			#velocity.x = input.x * speed * ground_coefficent
+			#velocity.y = input.y * speed * ground_coefficent
 		#
-		#if velocity.x > 0:
-			#velocity.x = floor(input.x * input_coefficient + velocity.x * friction_modifier)
-		#else:
-			#velocity.x = ceil(input.x * input_coefficient + velocity.x * friction_modifier)
-		##Y stuff
-		#if velocity.y > 0:
-			#velocity.y = floor(input.y * input_coefficient + velocity.y * friction_modifier)
-		#else:
-			#velocity.y = ceil(input.y * input_coefficient + velocity.y * friction_modifier)
+	#
+		##dash is active
 	#else:
-		#velocity.x = velocity.x + floor(input.x)*.5
-		#velocity.y = velocity.y + floor(input.y)*.5
+		#pass #keep velocity constant
+
+	#Horizontal movement code
+	#if player is on the ground, there is friction and movement speed is reduced by a modifier
+	if dash_not_active:
+		input = input * speed
+		var friction_modifier = .1
+		if !in_air:
+			#X stuff
+			if velocity.x > 0:
+				velocity.x = floor(input.x * ground_coefficent + velocity.x * friction_modifier)
+			else:
+				velocity.x = ceil(input.x * ground_coefficent  + velocity.x * friction_modifier)
+			#Y stuff
+			if velocity.y > 0:
+				velocity.y = floor(input.y * ground_coefficent  + velocity.y * friction_modifier)
+			else:
+				velocity.y = ceil(input.y * ground_coefficent + velocity.y * friction_modifier)
+				
+		else:
+			velocity.x = velocity.x * friction_modifier * .5 + floor(input.x * air_coefficent) 
+			velocity.y = velocity.y * friction_modifier * .5 + floor(input.y * air_coefficent)
 
 
 
@@ -250,6 +252,8 @@ func input_reader():
 
 
 func jump():
+	#TODO add special particles for when the player jumps mid-air (not directly on platform)
+	#TODO, set it up with less fuckin timers lmao
 	if(jump_ready):
 		$AnimationPlayer.play("jump!")
 		jump_ready = false
@@ -259,7 +263,7 @@ func jump():
 		$JumpTimer2.start() #collision box reappaears
 		$JumpTimer3.start() #landing
 		$JumpTimer4.start() #ready to jump again
-	#***** TODO, set up invulnerability stuff here when thats added :)
+	#***** TO-DO(NE?), set up invulnerability stuff here when thats added :) --> set deffered kinda does it
 		$PlayerBody.set_deferred("disabled", true);
 
 func dash():
