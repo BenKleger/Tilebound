@@ -80,9 +80,7 @@ func grapple_throw():
 			#if executes, retracts grappling hook, calling grapple_empty_retract()
 
 		#3. Grapple hook DOES connect -->conducted in grapple hook signal method and grappling hook code. 
-		
-	
-	pass
+
 
 
 

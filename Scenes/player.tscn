@@ -251,6 +251,7 @@ color_ramp = SubResource("GradientTexture1D_tx1dd")
 
 [node name="body" type="CharacterBody2D" parent="."]
 collision_layer = 3
+motion_mode = 1
 floor_stop_on_slope = false
 floor_block_on_wall = false
 platform_floor_layers = 4294967041

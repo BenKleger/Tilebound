@@ -31,11 +31,11 @@ func _ready():
 
 func load_room():
 	print("Placing tile")
-	tile_map_layer.set_cell(Vector2i(0, 0), 2, Vector2i(0, 0)) # layer 0, coords (0,0), source ID 0
 	_initialize_dungeon()
 	_place_entrance()
-	_generate_path(start, critical_path_length, "C")
-	_generate_branches()
+	#_generate_path(start, critical_path_length, "C")
+	#_generate_branches()
+	_generate_room(start, Vector2i(randi_range(5,10),randi_range(15,20)))
 	_generate_spawns()
 	_fill_gaps()
 	_print_dungeon()
@@ -48,19 +48,36 @@ func _initialize_dungeon():
 
 func _place_entrance():
 	
-	
-	
-	#Random Start position
+	#Random Start position, if out of range start location set, else leave it as is.
 	if start.x < 0 or start.x >= dimensions.x:
 		start.x = randi_range(0,dimensions.x - 1)
 	if start.y < 0 or start.y >= dimensions.y:
 		start.y = randi_range(0,dimensions.y - 1)
 	dungeon[start.x][start.y] = "S"
 
-func  _generate_path(from: Vector2i, length:int, marker: String) -> bool:
 
+#to be called with a start tile, and a size with 1/2 width and 1/1 height
+#want start to be in the bottom middle (x in the center), y at bottom
+func _generate_room(start: Vector2i, size: Vector2i):
+	var coords_min : Vector2i = Vector2i(start.x-size.x, start.y)
+	var coords_max : Vector2i = Vector2i(start.x+size.x, start.y + size.y)
+	if coords_min.x < 0:
+		coords_min.x = 0
+	if coords_max.x >= dimensions.x:
+		coords_max.x = dimensions.x-1
+	if coords_min.y < 0:
+		coords_min.y = 0
+	if coords_max.y >= dimensions.y:
+		coords_max.y = dimensions.y-1
+	#all coords are legal dungeon coordinates now
+	#time to put them all into the dungeon :)
+	for x in range(coords_min.x,coords_max.x):
+		for y in range(coords_min.y,coords_max.y):
+			if !dungeon[x][y]:
+				dungeon[x][y] = "R"
 	
-	if length == 0:	
+func  _generate_path(from: Vector2i, length:int, marker: String) -> bool:
+	if length == 0:
 		if marker == "C":
 			if from.distance_to(start) < min_length:
 				return false
@@ -181,7 +198,7 @@ func _tile_placer(tile_position):
 			print("Player position: ", $Player.position)
 		0:  #nothing
 			pass
-		"C": #critical path
+		"R": #Room
 			tile_map_layer.set_cell(tile_position,2,Vector2i(0,base_tile))
 		"E": #enemy
 			tile_map_layer.set_cell(tile_position,2,Vector2i(2,base_tile))

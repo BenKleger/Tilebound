@@ -53,7 +53,7 @@ region = Rect2(22, 8, 11, 7)
 atlas = ExtResource("2_p1xxi")
 region = Rect2(33, 8, 11, 7)
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_oi5nh"]
+[sub_resource type="SpriteFrames" id="SpriteFrames_xsyo3"]
 animations = [{
 "frames": [{
 "duration": 1.0,
@@ -107,16 +107,16 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_i2uv7"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_oi5nh"]
 radius = 6.0
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_oggg7"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_qmdr4"]
 radius = 219.185
 
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_qmdr4"]
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_3mnvw"]
 gradient = ExtResource("4_oi5nh")
 
-[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_3mnvw"]
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_h65gf"]
 particle_flag_disable_z = true
 emission_shape = 1
 emission_sphere_radius = 5.0
@@ -125,38 +125,32 @@ angle_max = 90.0
 gravity = Vector3(0, -20, 0)
 scale_min = 0.5
 scale_max = 0.5
-color_ramp = SubResource("GradientTexture1D_qmdr4")
+color_ramp = SubResource("GradientTexture1D_3mnvw")
 
-[node name="slime" type="Node2D"]
-
-[node name="slimeBody" type="CharacterBody2D" parent="."]
+[node name="slimeBody" type="CharacterBody2D"]
+motion_mode = 1
 script = ExtResource("1_p1xxi")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="slimeBody"]
-sprite_frames = SubResource("SpriteFrames_oi5nh")
+[node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_xsyo3")
 animation = &"walk"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="slimeBody"]
-shape = SubResource("CircleShape2D_i2uv7")
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_oi5nh")
 
-[node name="detection_area" type="Area2D" parent="slimeBody"]
+[node name="detection_area2" type="Area2D" parent="."]
 collision_layer = 2
 collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="slimeBody/detection_area"]
-shape = SubResource("CircleShape2D_oggg7")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="detection_area2"]
+shape = SubResource("CircleShape2D_qmdr4")
 
-[node name="StunTimer" type="Timer" parent="slimeBody"]
+[node name="StunTimer2" type="Timer" parent="."]
 wait_time = 5.0
 one_shot = true
 
-[node name="StunParticles" type="GPUParticles2D" parent="slimeBody"]
+[node name="StunParticles2" type="GPUParticles2D" parent="."]
 emitting = false
 amount = 3
 texture = ExtResource("3_xsyo3")
-process_material = SubResource("ParticleProcessMaterial_3mnvw")
-
-[connection signal="area_entered" from="slimeBody/detection_area" to="slimeBody" method="_on_detection_area_area_entered"]
-[connection signal="body_entered" from="slimeBody/detection_area" to="slimeBody" method="_on_detection_area_body_entered"]
-[connection signal="body_exited" from="slimeBody/detection_area" to="slimeBody" method="_on_detection_area_body_exited"]
-[connection signal="timeout" from="slimeBody/StunTimer" to="slimeBody" method="_on_stun_timer_timeout"]
+process_material = SubResource("ParticleProcessMaterial_h65gf")

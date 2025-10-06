@@ -26,7 +26,7 @@ var stunned = false
 func _ready():
 	update_offset = randi() % update_interval
 	randomize()  # optional, in one global place
-	var shape = $detection_area/CollisionShape2D.shape
+	var shape = $detection_area2/CollisionShape2D.shape
 	if shape is CircleShape2D:
 		radius = shape.radius
 
@@ -39,7 +39,7 @@ func _physics_process(delta): #probably want this to run only every 30 frames or
 			if player_chase:
 				last_position_detected = player.last_position_on_ground
 				if global_position.distance_to(last_position_detected) > player_size:
-					move(last_position_detected, delta, 0.75)
+					move(last_position_detected, 0.75)
 				else:
 					idle(delta)
 			elif player != null:
@@ -60,14 +60,14 @@ func _physics_process(delta): #probably want this to run only every 30 frames or
 		#stunned
 		velocity = Vector2.ZERO
 
-func move(pos:Vector2, delta, modifier = 1):
+func move(pos:Vector2, modifier = 1.0):
 
 		current_velocity = (pos - global_position).normalized() * speed * modifier
-		$AnimatedSprite2D.play("walk")
+		$AnimatedSprite2D2.play("walk")
 		if (pos.x-global_position.x)<0:
-			$AnimatedSprite2D.flip_h=true
+			$AnimatedSprite2D2.flip_h=true
 		else:
-			$AnimatedSprite2D.flip_h=false
+			$AnimatedSprite2D2.flip_h=false
 
 func kill():
 	queue_free()
@@ -75,31 +75,40 @@ func kill():
 func stun():
 	print("Enemy is Stunned!")
 	stunned = true
-	$StunTimer.start()
-	$StunParticles.emitting = true
+	$StunTimer2.start()
+	$StunParticles2.emitting = true
+
+
+func initialize(start_position):
+
+	global_position = start_position
+	
+
 
 func idle(delta):
-	if !stunned:
-		idle_timer -= delta
-		if idle_timer <= 0:
-			if idle_moving:
-				idle_moving = false
-				idle_timer = idle_wait_duration
-				current_velocity = Vector2.ZERO
-				$AnimatedSprite2D.play("idle")
-			else:
-				var angle = randf() * TAU
-				idle_direction = Vector2(cos(angle), sin(angle)).normalized()
-				idle_target_position = global_position + idle_direction * 10
-				idle_moving = true
-				idle_timer = idle_move_duration
-
-		if idle_moving:
-			move(idle_target_position, delta, 0.5)
-		else:
-			current_velocity = Vector2.ZERO
-	else: #is stunned
-		velocity = Vector2.ZERO
+	velocity = Vector2.ZERO
+#dumb chatgpt bs
+	#if !stunned:
+		#idle_timer -= delta
+		#if idle_timer <= 0:
+			#if idle_moving:
+				#idle_moving = false
+				#idle_timer = idle_wait_duration
+				#current_velocity = Vector2.ZERO
+				#$AnimatedSprite2D2.play("idle")
+			#else:
+				#var angle = randf() * TAU
+				#idle_direction = Vector2(cos(angle), sin(angle)).normalized()
+				#idle_target_position = global_position + idle_direction * 10
+				#idle_moving = true
+				#idle_timer = idle_move_duration
+#
+		#if idle_moving:
+			#move(idle_target_position, 0.5)
+		#else:
+			#current_velocity = Vector2.ZERO
+	#else: #is stunned
+		#velocity = Vector2.ZERO
 
 func take_damage(damage: int):
 	if (health-damage<=0):
@@ -126,4 +135,4 @@ func enemy():
 
 func _on_stun_timer_timeout() -> void:
 	stunned = false 
-	$StunParticles.emitting = false  
+	$StunParticles2.emitting = false  

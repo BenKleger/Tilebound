@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://c6e83fpc40bks"]
+
+[ext_resource type="Script" uid="uid://dk6ypx75bf2bl" path="res://door.gd" id="1_ba8gm"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ba8gm"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_v6xrn"]
+
+[node name="doorArea" type="Area2D"]
+script = ExtResource("1_ba8gm")
+
+[node name="doorShape" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_ba8gm")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_v6xrn")
+
+[node name="OpenTimer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]
+[connection signal="timeout" from="OpenTimer" to="." method="_on_open_timer_timeout"]

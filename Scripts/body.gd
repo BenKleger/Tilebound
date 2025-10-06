@@ -57,12 +57,11 @@ func _process(delta):
 	enemy_attack()
 	
 	falling_check()
-		
+	
+	animate()
 
 #TODO Bounce Pad --> with in air enemies add some form of retaliation --> shoot a homing projectile at them with the press of a button, using similar mechanics to the grapple return stuff to chase and scale in size properly.
 #TODO Summoning
-#TODO Fix grappling hook
-#TODO Fix size speed issue
 
 
 

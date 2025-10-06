@@ -1,18 +1,18 @@
-[gd_scene load_steps=5 format=3 uid="uid://33qkkqtqd0sk"]
+[gd_scene load_steps=5 format=3 uid="uid://chpf1mi73lk8d"]
 
-[ext_resource type="Script" uid="uid://bgx0v1wr4pibg" path="res://Scripts/room.gd" id="1_88gup"]
-[ext_resource type="TileSet" uid="uid://bouta76u8qas2" path="res://resources/mapstuffs/myTileSet.tres" id="2_lsht4"]
-[ext_resource type="PackedScene" uid="uid://bbis8ibrragw4" path="res://Scenes/player.tscn" id="4_6mpvv"]
+[ext_resource type="Script" uid="uid://dwgxfdi3bxihc" path="res://newroom.gd" id="1_ygf5w"]
+[ext_resource type="TileSet" uid="uid://bouta76u8qas2" path="res://resources/mapstuffs/myTileSet.tres" id="2_357gm"]
+[ext_resource type="PackedScene" uid="uid://bbis8ibrragw4" path="res://Scenes/player.tscn" id="3_v2584"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mbine"]
 
 [node name="room" type="Node2D"]
-script = ExtResource("1_88gup")
+script = ExtResource("1_ygf5w")
 
 [node name="tilemap" type="Node2D" parent="."]
 
 [node name="TileMapLayer" type="TileMapLayer" parent="tilemap"]
-tile_set = ExtResource("2_lsht4")
+tile_set = ExtResource("2_357gm")
 
 [node name="Doors" type="Node2D" parent="."]
 
@@ -36,7 +36,7 @@ shape = SubResource("RectangleShape2D_mbine")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/DoorW"]
 shape = SubResource("RectangleShape2D_mbine")
 
-[node name="Player" parent="." instance=ExtResource("4_6mpvv")]
+[node name="Player" parent="." instance=ExtResource("3_v2584")]
 position = Vector2(37, -2)
 
 [node name="EnemyContainer" type="Node2D" parent="."]
