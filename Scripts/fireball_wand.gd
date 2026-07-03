@@ -11,7 +11,7 @@ var enemy : Node2D
 var rotation_amount
 var rest_position
 var shoot_ready: bool = true
-var spread = 0#.05 #for bullet, 1 ~ 180 degree spread
+var spread = 0.1#.05 #for bullet, 1 ~ 180 degree spread
 
 
 @export var travel_time: float = 1
@@ -29,7 +29,7 @@ func _ready():
 	pass
 
 
-func _process(delta):
+func _process(_delta):
 	
 	if mode == 0:
 		idle()
@@ -64,7 +64,7 @@ func shoot():
 		$ShootTimer.start()
 
 
-func get_parallel_component(vector: Vector2, direction: Vector2) -> Vector2:
+func get_parallel_component(vector: Vector2, Direction: Vector2) -> Vector2:
  	
   #Calculates the component of vector that is parallel to direction.
 
@@ -75,7 +75,7 @@ func get_parallel_component(vector: Vector2, direction: Vector2) -> Vector2:
   #Returns:
 	#The parallel component of vector.
 
-	var direction_normalized = direction.normalized()
+	var direction_normalized = Direction.normalized()
 	var dot_product = vector.dot(direction_normalized)
 	return direction_normalized * dot_product
 

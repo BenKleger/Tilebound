@@ -154,3 +154,6 @@ emitting = false
 amount = 3
 texture = ExtResource("3_xsyo3")
 process_material = SubResource("ParticleProcessMaterial_h65gf")
+
+[connection signal="body_entered" from="detection_area2" to="." method="_on_detection_area_body_entered"]
+[connection signal="body_exited" from="detection_area2" to="." method="_on_detection_area_body_exited"]

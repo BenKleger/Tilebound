@@ -85,7 +85,7 @@ func initialize(start_position):
 	
 
 
-func idle(delta):
+func idle(_delta):
 	velocity = Vector2.ZERO
 #dumb chatgpt bs
 	#if !stunned:
@@ -125,7 +125,7 @@ func _on_detection_area_body_entered(body: Node2D) -> void:
 	player = body
 	player_chase = true
 	
-func _on_detection_area_body_exited(body: Node2D) -> void:
+func _on_detection_area_body_exited(_body: Node2D) -> void:
 	player_chase = false
 
 

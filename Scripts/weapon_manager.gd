@@ -27,7 +27,7 @@ func _ready():
 	call_deferred("spawn_fireball_wand")
 	call_deferred("spawn_fireball_wand")
 	
-func _process(delta):
+func _process(_delta):
 	var n : int = 1
 	var r = 30*player.scale
 	var vec_r = - (global_position - get_global_mouse_position())

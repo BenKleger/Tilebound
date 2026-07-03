@@ -40,3 +40,8 @@ shape = SubResource("RectangleShape2D_mbine")
 position = Vector2(37, -2)
 
 [node name="EnemyContainer" type="Node2D" parent="."]
+
+[connection signal="area_entered" from="Doors/DoorN" to="." method="_on_door_n_area_entered"]
+[connection signal="area_entered" from="Doors/DoorE" to="." method="_on_door_e_area_entered"]
+[connection signal="area_entered" from="Doors/DoorS" to="." method="_on_door_s_area_entered"]
+[connection signal="area_entered" from="Doors/DoorW" to="." method="_on_door_w_area_entered"]

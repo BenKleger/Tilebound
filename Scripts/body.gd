@@ -12,7 +12,7 @@ var falling = false
 var dash_not_active = true
 var shoot_ready = true
 var damage_ready = true
-var ground_coefficent = 10
+var ground_coefficent = 15
 var air_coefficent = 12
 var health = 100
 var dead = false
@@ -22,6 +22,7 @@ var dash_ready = true
 var grapple_ready = true
 var grappling = false
 var enemy_in_attack_range = false
+var fall_damage = 10
 var last_input:Vector2 = Vector2.DOWN;
 #for enemy tracking purposes
 var last_position_on_ground:Vector2 = global_position
@@ -73,23 +74,23 @@ func animate():
 
 func falling_check():
 	#update position for enemy tracking
-	if ! in_air:
-		last_position_on_ground = global_position
 	
 	
 	# Check if standing on a platform
 	#var local_pos = tilemap.to_local(global_position)  # convert to TileMapLayer space
 	#var tile_pos = tilemap.local_to_map(tilemap.to_local(global_position))
 	var tile_data  = tilemap.get_cell_tile_data(tilemap.local_to_map(tilemap.to_local(global_position)))
-	var tile_data1 = tilemap.get_cell_tile_data(tilemap.local_to_map(tilemap.to_local(global_position + Vector2.DOWN * 15)))
-	var tile_data2 = tilemap.get_cell_tile_data(tilemap.local_to_map(tilemap.to_local(global_position + Vector2.LEFT * 15)))
-	var tile_data3 = tilemap.get_cell_tile_data(tilemap.local_to_map(tilemap.to_local(global_position - Vector2.LEFT * 15)))
-	var tile_data4 = tilemap.get_cell_tile_data(tilemap.local_to_map(tilemap.to_local(global_position - Vector2.DOWN * 15)))
+	var tile_data1 = tilemap.get_cell_tile_data(tilemap.local_to_map(tilemap.to_local(global_position + Vector2.DOWN * 5)))
+	var tile_data2 = tilemap.get_cell_tile_data(tilemap.local_to_map(tilemap.to_local(global_position + Vector2.LEFT * 5)))
+	var tile_data3 = tilemap.get_cell_tile_data(tilemap.local_to_map(tilemap.to_local(global_position - Vector2.LEFT * 5)))
+	var tile_data4 = tilemap.get_cell_tile_data(tilemap.local_to_map(tilemap.to_local(global_position - Vector2.DOWN * 5)))
 	
 	var on_platform = tile_data != null or tile_data1 != null or tile_data2 != null or tile_data3 != null or tile_data4 != null 
 	#iterate thru all neighbouring tiles, if the player is on one of them, he's also safe from falling
 	
 	
+	if !in_air && on_platform:
+		last_position_on_ground = global_position
 	
 	#coyote time stuff
 	#want to check if the player is on the platform, put that in the 0th index of fall_check,
@@ -121,6 +122,19 @@ func fall():
 	print("FALLING!")
 	$AnimationPlayer.play("falling")
 	$FallingTimer.start()
+
+func _on_falling_timer_timeout() -> void:
+	#teleport player to the location they fell from, dealing damage
+	print(last_position_on_ground)
+	take_damage(fall_damage)
+	global_position = last_position_on_ground
+	$AnimationPlayer.play("RESET")
+	
+	falling = false
+	
+	# TODO make it such that when you fall you get a small invulnerability window after recovrey
+	# immune = true
+	# new timer that on time out removes immune after a length of say 0.25s
 
 func take_damage(damage: int):
 	if !immune:
@@ -345,9 +359,6 @@ func enemy_attack(damage = 10):
 		if damage_ready: 
 			
 			take_damage(damage)
-
-func _on_falling_timer_timeout() -> void:
-	kill()
 
 
 func _on_damage_timer_timeout() -> void:

@@ -33,7 +33,7 @@ func _process(delta):
 		position += (direction.normalized() * speed * delta + parallel_velocity/4 * delta) / 10
 
 
-func get_parallel_component(vector: Vector2, direction: Vector2) -> Vector2:
+func get_parallel_component(vector: Vector2, Direction: Vector2) -> Vector2:
  	
   #Calculates the component of vector that is parallel to direction.
 
@@ -44,7 +44,7 @@ func get_parallel_component(vector: Vector2, direction: Vector2) -> Vector2:
   #Returns:
 	#The parallel component of vector.
 
-	var direction_normalized = direction.normalized()
+	var direction_normalized = Direction.normalized()
 	var dot_product = vector.dot(direction_normalized)
 	return direction_normalized * dot_product
 

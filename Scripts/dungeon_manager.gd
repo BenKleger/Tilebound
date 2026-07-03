@@ -10,6 +10,7 @@ var max_length:int = 10
 var grid = []
 const Room = preload("res://Scenes/room.tscn")
 const ROOM_DATA = preload("res://resources/RoomData.tres")
+const GAME = preload("res://Scenes/game.tscn")
 
 func _ready():
 	# 0. initialize grid
@@ -34,7 +35,7 @@ func initialize_grid():
 			room_data.depth = x
 			room_data.type = room_data_type(x)
 			var room = Room.instantiate()
-			room.setup(room_data)
+			room.setup(room_data)  #setup
 			grid[x].append(room)
 
 # -------------------------
@@ -56,7 +57,7 @@ func generate_dungeon():
 
 
 func load_room(id: int):
-	const GAME = preload("res://Scenes/game.tscn")
+	
 	#TODO
 	var room = grid[floor(id/10)][id%10]
 	add_child(room)

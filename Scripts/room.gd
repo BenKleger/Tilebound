@@ -8,7 +8,8 @@ var data: RoomData
 @export var branch_length : Vector2i = Vector2i(2,6)
 var dungeon: Array
 var branch_candidates: Array[Vector2i]
-
+var door_status
+var empty = false
 
 var base_tile = 9 #row of the tileset to use
 
@@ -18,7 +19,11 @@ var base_tile = 9 #row of the tileset to use
 const slime = preload("res://Scenes/Slime.tscn")
 
 @onready var tile_map_layer: TileMapLayer = $tilemap/TileMapLayer
-
+@onready var doorN: Area2D = $Doors/DoorN
+@onready var doorE: Area2D = $Doors/DoorE
+@onready var doorS: Area2D = $Doors/DoorS
+@onready var doorW: Area2D = $Doors/DoorW
+@onready var enemyContainer: Node2D = $EnemyContainer
 
 #TODO Add doors! lockable and making sure our rooms know their reward
 
@@ -30,8 +35,6 @@ func _ready():
 	load_room()
 
 func load_room():
-	print("Placing tile")
-	tile_map_layer.set_cell(Vector2i(0, 0), 2, Vector2i(0, 0)) # layer 0, coords (0,0), source ID 0
 	_initialize_dungeon()
 	_place_entrance()
 	_generate_path(start, critical_path_length, "C")
@@ -96,7 +99,6 @@ func  _generate_path(from: Vector2i, length:int, marker: String) -> bool:
 		direction = Vector2(direction.y,-direction.x)
 	return false
 
-
 func _generate_branches():
 	var branches_created : int = 0
 	var candidate : Vector2i
@@ -121,8 +123,6 @@ func spawn_enemy(location: Vector2i):
 	dungeon[location.x][location.y] = "E"
 	
 	tile_map_layer.to_global(location)
-	
-	
 
 func pick_enemy():
 	#TODO : select an enemy that is within the budget to spawn
@@ -155,16 +155,46 @@ func _fill_gaps():
 					dungeon[x+1][y] and dungeon[x-1][y] and dungeon[x][y-1]):
 					dungeon[x][y] = "f"
 
-func _print_dungeon() -> void:
+func _print_dungeon() -> void:  # also generates doors :)
+	
+	var min_x = 99999
+	var min_x_y # y at min_x
+	var max_x = -99999
+	var max_x_y # y at max_x
+	var min_y = 99999
+	var min_y_x # x at min y
+	var max_y = -99999
+	var max_y_x # x at max y
 	var dungeon_as_string = ""
-	for y in range(dimensions.y -1, -1, -1):
+	for y in dimensions.y:
 		for x in dimensions.x:
 			if dungeon[x][y]:
+				if x < min_x:
+					min_x = x
+					min_x_y = y
+				if y <= min_y:
+					min_y = y
+					min_y_x = x
+				if x > max_x:
+					max_x = x
+					max_x_y = y
+				if y >= max_y:
+					max_y = y
+					max_y_x = x
+					
 				var tile_position = Vector2i(x,y)
 				dungeon_as_string += "[" +str(dungeon[x][y]) + "]"
 				_tile_placer(tile_position)
 			else: dungeon_as_string +="[ ]"
 		dungeon_as_string += '\n'
+	dungeon[min_x][min_x_y] = 'd1'
+	dungeon[max_x][max_x_y] = 'd2'
+	dungeon[min_y_x][min_y] = 'd3'
+	dungeon[max_y_x][max_y] = 'd4'
+	_tile_placer(Vector2i(min_x, min_x_y))
+	_tile_placer(Vector2i(max_x, max_x_y))
+	_tile_placer(Vector2i(min_y_x, min_y))
+	_tile_placer(Vector2i(max_y_x, max_y))
 	print(dungeon_as_string)
 
 func _tile_placer(tile_position):
@@ -187,31 +217,76 @@ func _tile_placer(tile_position):
 			tile_map_layer.set_cell(tile_position,2,Vector2i(2,base_tile))
 			#spawn enemy
 			var Slime = slime.instantiate()
-			add_child(Slime)
+			enemyContainer.add_child(Slime)
 			Slime.initialize(tile_map_layer.map_to_local(tile_position))
 			print("Slime spawned!")
+		"d1","d2","d3","d4": #door
+			tile_map_layer.set_cell(tile_position,2,Vector2i(3,base_tile))
+			match marker:
+				"d1":
+					connect_door(tile_position, doorN)
+				"d2":
+					connect_door(tile_position, doorE)
+				"d3":
+					connect_door(tile_position, doorS)
+				"d4":
+					connect_door(tile_position, doorW)
+				
 		_: #default
 			tile_map_layer.set_cell(tile_position,2,Vector2i(0,base_tile))
 
+func connect_door(location: Vector2i, door: Area2D):
+	# is this really it??
+	door.global_position = tile_map_layer.to_global(location)
+	# maybe connect it with reward?
+
+# function to be used for initializing procedural spawning, with a sister function not yet created
+# thus far, not used in this node, but called from dungeon manager
 func setup(room_data: RoomData):
 	data = room_data
 	lock_doors()
-	var difficulty = (data.depth + 1) * 2 
-	#ProceduralSpawner.spawn_enemies(difficulty, enemy_container)
+	var difficulty = (data.depth + 1) * 2  #remove underscore later when used
+	
+	# ProceduralSpawner.spawn_enemies(difficulty, enemyContainer)
 	#TODO
 
 func lock_doors():
-	pass
+	door_status = 'locked'
+	
 
-#TODO : unlock all the doors, other than where you came from (as it collapsed)
-func unlock_doors():
-	pass
-
-func _on_enemy_died():
-	if $EnemyContainer.get_child_count() == 0:
+# AFTER ROOM -- communicate with parent node of room (dungeon_manager),
+# Telling it to create a new room with
+func _process(_delta):
+	if ($EnemyContainer.get_child_count() == 0 && !empty): #!empty s.t. reward is generated once
+		empty = true
+		print("WOOOOO, ROOM CLEARED!!!")
 		unlock_doors()
 		spawn_reward()
 
+func unlock_doors():
+	#TODO : unlock all the doors, other than where you came from (as it collapsed)
+	# Unsure if I wanna do this -- would mean changing spawning area to one from before and would require using a more conventional map layout for rooms
+	door_status = 'unlocked'
+
+
+
 func spawn_reward():
 	#spawn the reward for the player.
-	pass #TODO
+	pass #TODO pick up thing, maybe a selection option
+
+
+func _on_door_n_area_entered(area: Area2D) -> void:
+	enter_door(doorN)
+
+func _on_door_e_area_entered(area: Area2D) -> void:
+	enter_door(doorE)
+
+func _on_door_s_area_entered(area: Area2D) -> void:
+	enter_door(doorS)
+
+func _on_door_w_area_entered(area: Area2D) -> void:
+	enter_door(doorW)
+
+func enter_door(door):
+	if door_status == "unlocked":
+		pass
