@@ -53,11 +53,7 @@ Godot Engine
 GDScript
 
 ## Controls
-WASD / Arrow Keys – Move
-Shift – Dash
-Space - Jump
-E - Grapple
-Left Mouse Button – Attack
+WASD / Arrow Keys – Move | Shift – Dash | Space - Jump | E - Grapple | Left Mouse Button – Attack
 
 ## Screenshots
 <img width="634" height="424" alt="{6BDCB99A-E7C8-45B9-8E16-13C69E6C67C4}" src="https://github.com/user-attachments/assets/1ea6dcae-8dea-4abf-9f5f-ede2138870f6" />
