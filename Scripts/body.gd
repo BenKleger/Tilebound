@@ -105,17 +105,12 @@ func falling_check():
 		if !on_ground_check():
 			if !falling:
 				fall()
-	
-	
-	
 
 func on_ground_check():
 	for i in on_ground:
 		if i == true:
 			return true
 	return false
-	
-
 
 func fall():
 	falling = true
@@ -129,9 +124,7 @@ func _on_falling_timer_timeout() -> void:
 	take_damage(fall_damage)
 	global_position = last_position_on_ground
 	$AnimationPlayer.play("RESET")
-	
 	falling = false
-	
 	# TODO make it such that when you fall you get a small invulnerability window after recovrey
 	# immune = true
 	# new timer that on time out removes immune after a length of say 0.25s
@@ -189,16 +182,24 @@ func movement_direction_calculator():
 			if(!Input.is_action_pressed("ui_right")):
 				direction.x = -1.865;      
 				
+				$AnimatedSprite2D.flip_h = false
+			else: direction.x = 0
 		else:
 			if(Input.is_action_pressed("ui_right")):
 				direction.x = 1.865;
+				#Flip direction of sprite
+				#TODO
+				$AnimatedSprite2D.flip_h = true
+			else: direction.x = 0
 		#Y direction calculation
 		if(Input.is_action_pressed("ui_up")):
 			if(!Input.is_action_pressed("ui_down")):
 				direction.y = -1;
+			else: direction.y = 0
 		else:
 			if(Input.is_action_pressed("ui_down")):
 				direction.y = 1;
+			else: direction.y = 0
 		#normalization   
 		#for normalization, as the map is (currently) a 16x32 setup, it would be nice if we moved 16 pixels up for every 32 horizontal while both are pressed.
 		#this would result in twice as much horizontal motion as vertical... can just update direction.x to 2 instead of 1 in all the lines above, and normalize it the same way :)
